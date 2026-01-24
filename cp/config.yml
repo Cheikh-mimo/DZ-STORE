@@ -9,19 +9,19 @@ public_folder: "/images/products"
 
 collections:
   - name: "products"
-    label: "«·„‰ Ã« "
+    label: "√á√°√£√§√ä√å√á√ä"
     folder: "products"
     create: true
     slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
     extension: "json"
     format: "json"
     fields:
-      - label: "«”„ «·„‰ Ã"
+      - label: "√á√ì√£ √á√°√£√§√ä√å"
         name: "title"
         widget: "string"
-        hint: "„À«·: Õ”«» Free Fire „” ÊÏ 65"
+        hint: "√£√ã√á√°: √ç√ì√á√à Free Fire √£√ì√ä√¶√¨ 65"
         
-      - label: "«·›∆…"
+      - label: "√á√°√ù√Ü√â"
         name: "category"
         widget: "select"
         options:
@@ -29,48 +29,48 @@ collections:
           - { label: "PUBG ??", value: "pubg" }
           - { label: "PES ?", value: "pes" }
           - { label: "Google Play ??", value: "googleplay" }
-          - { label: "Œœ„«  ??", value: "services" }
+          - { label: "√é√è√£√á√ä ??", value: "services" }
         
-      - label: "‰Ê⁄ «·⁄—÷"
+      - label: "√§√¶√ö √á√°√ö√ë√ñ"
         name: "type"
         widget: "select"
         options:
-          - { label: "?? »Ì⁄", value: "»Ì⁄" }
-          - { label: "?? ‘—«¡", value: "‘—«¡" }
-          - { label: "??  »«œ·", value: " »«œ·" }
+          - { label: "?? √à√≠√ö", value: "√à√≠√ö" }
+          - { label: "?? √î√ë√á√Å", value: "√î√ë√á√Å" }
+          - { label: "?? √ä√à√á√è√°", value: "√ä√à√á√è√°" }
         
-      - label: "«·”⁄— »«·œÌ‰«— «·Ã“«∆—Ì (DA)"
+      - label: "√á√°√ì√ö√ë √à√á√°√è√≠√§√á√ë √á√°√å√í√á√Ü√ë√≠ (DA)"
         name: "priceDA"
         widget: "number"
         value_type: "int"
         min: 0
-        hint: "„À«·: 5000"
+        hint: "√£√ã√á√°: 5000"
         
-      - label: "«·”⁄— »«·œÊ·«— ($)"
+      - label: "√á√°√ì√ö√ë √à√á√°√è√¶√°√á√ë ($)"
         name: "priceUSD"
         widget: "number"
         value_type: "float"
         min: 0
         step: 0.01
-        hint: "„À«·: 35.50"
+        hint: "√£√ã√á√°: 35.50"
         
-      - label: "Ê’› «·„‰ Ã / «·„Ê«’›« "
+      - label: "√¶√ï√ù √á√°√£√§√ä√å / √á√°√£√¶√á√ï√ù√á√ä"
         name: "description"
         widget: "text"
-        hint: "«–ﬂ— „Ê«’›«  «·Õ”«» »«· ›’Ì·: «··›·° «·‘Œ’Ì« ° «·√”·Õ…° «·„„Ì“« ° ≈·Œ..."
+        hint: "√á√ê√ü√ë √£√¶√á√ï√ù√á√ä √á√°√ç√ì√á√à √à√á√°√ä√ù√ï√≠√°: √á√°√°√ù√°¬° √á√°√î√é√ï√≠√á√ä¬° √á√°√É√ì√°√ç√â¬° √á√°√£√£√≠√í√á√ä¬° √Ö√°√é..."
         
-      - label: "’Ê—… «·„‰ Ã"
+      - label: "√ï√¶√ë√â √á√°√£√§√ä√å"
         name: "image"
         widget: "image"
         allow_multiple: false
-        hint: "«—›⁄ ’Ê—… Ê«÷Õ… ··Õ”«» √Ê «·„‰ Ã"
+        hint: "√á√ë√ù√ö √ï√¶√ë√â √¶√á√ñ√ç√â √°√°√ç√ì√á√à √É√¶ √á√°√£√§√ä√å"
         
-      - label: "—«»ÿ «·»«∆⁄"
+      - label: "√ë√á√à√ò √á√°√à√á√Ü√ö"
         name: "sellerLink"
         widget: "string"
-        hint: "÷⁄ —«»ÿ «·Ê« ”«» √Ê «·›Ì”»Êﬂ √Ê «· Ì·ÌÃ—«„ ··»«∆⁄ «·√’·Ì („À«·: https://wa.me/213xxxxxxxxx)"
+        hint: "√ñ√ö √ë√á√à√ò √á√°√¶√á√ä√ì√á√à √É√¶ √á√°√ù√≠√ì√à√¶√ü √É√¶ √á√°√ä√≠√°√≠√å√ë√á√£ √°√°√à√á√Ü√ö √á√°√É√ï√°√≠ (√£√ã√á√°: https://wa.me/213xxxxxxxxx)"
         
-      - label: " «—ÌŒ «·‰‘—"
+      - label: "√ä√á√ë√≠√é √á√°√§√î√ë"
         name: "date"
         widget: "datetime"
         default: ""
