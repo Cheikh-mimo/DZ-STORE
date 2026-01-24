@@ -3,170 +3,306 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DZ-STORE | Luxury Gaming Admin</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <title>Luxury Admin - نظام إدارة المنتجات</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Cairo', sans-serif; background-color: #050505; color: #e5e7eb; }
-        .luxury-card { background: linear-gradient(145deg, #111827, #020617); border: 1px solid #1e293b; }
-        .gold-text { background: linear-gradient(to right, #fde047, #ca8a04); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .electric-blue { color: #3b82f6; text-shadow: 0 0 10px rgba(59, 130, 246, 0.5); }
-        .btn-luxury { background: linear-gradient(90deg, #ca8a04 0%, #a16207 100%); transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
-        .btn-luxury:hover { transform: translateY(-2px); box-shadow: 0 4px 15px rgba(202, 138, 4, 0.4); }
-        .glass-input { background: rgba(31, 41, 55, 0.5); border: 1px solid #374151; transition: 0.3s; }
-        .glass-input:focus { border-color: #3b82f6; box-shadow: 0 0 8px rgba(59, 130, 246, 0.3); outline: none; }
-        .sidebar-link:hover { background: rgba(59, 130, 246, 0.1); border-right: 4px solid #3b82f6; }
+        /* سأحتفظ بتنسيقات صديقك مع إضافة تنسيقات واجهة التوكن */
+        :root {
+            --primary: #1a2a6c;
+            --accent: #ff5e00;
+        }
+        
+        /* كود صديقك الأصلي هنا (تم اختصاره للعرض) */
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background-color: #f5f7fa; color: #333; }
+        .container { max-width: 1400px; margin: 0 auto; padding: 20px; display: none; } /* مخفي حتى يتم التأكد من التوكن */
+        
+        /* واجهة طلب التوكن الجديدة */
+        #authOverlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
+            z-index: 9999; display: flex; align-items: center; justify-content: center;
+        }
+        .auth-card {
+            background: white; padding: 40px; border-radius: 15px; box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+            width: 90%; max-width: 400px; text-align: center;
+        }
+        .auth-card i { font-size: 50px; color: var(--primary); margin-bottom: 20px; }
+        .auth-card input {
+            width: 100%; padding: 12px; margin: 20px 0; border: 2px solid #ddd; border-radius: 8px;
+            text-align: center; font-family: monospace;
+        }
+        .auth-card .btn-login {
+            background: var(--primary); color: white; border: none; padding: 12px 30px;
+            border-radius: 8px; cursor: pointer; font-weight: bold; width: 100%;
+        }
+        .error-msg { color: #e53935; font-size: 14px; margin-top: 10px; display: none; }
+        
+        /* تأثير الهزة عند الخطأ */
+        .shake { animation: shake 0.5s; border-color: #e53935 !important; }
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
+
+        /* تنسيقات إضافية لزر رفع الصورة */
+        .image-preview { width: 100px; height: 100px; border: 2px dashed #ddd; margin-top: 10px; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+        .image-preview img { max-width: 100%; }
+
+        /* باقي تنسيقات صديقك */
+        header { background: linear-gradient(135deg, #1a2a6c, #2d4196); color: white; padding: 20px; border-radius: 10px; margin-bottom: 30px; display: flex; justify-content: space-between; align-items: center; }
+        .add-product-btn { background: linear-gradient(to right, #ff9a00, #ff5e00); color: white; border: none; padding: 12px 25px; border-radius: 50px; cursor: pointer; font-weight: bold; }
+        .products-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 25px; }
+        .product-card { background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 5px 15px rgba(0,0,0,0.08); }
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 1000; }
+        .modal-content { background: white; width: 90%; max-width: 700px; margin: 50px auto; border-radius: 12px; }
+        .conditional-section { display: none; padding: 15px; background: #f9f9f9; border-radius: 8px; margin-top: 15px; }
     </style>
 </head>
 <body>
 
-    <div id="main-content" class="min-h-screen flex flex-col md:flex-row" style="display:none;">
-        <aside class="w-full md:w-72 luxury-card p-6 flex flex-col shadow-2xl">
-            <div class="mb-10 text-center">
-                <h1 class="text-3xl font-extrabold gold-text tracking-tighter italic">DZ-STORE</h1>
-                <p class="text-[10px] electric-blue font-bold uppercase tracking-[0.2em]">Gaming Luxury Dashboard</p>
-            </div>
-            <nav class="flex-1 space-y-2 text-sm">
-                <a href="#" class="sidebar-link flex items-center p-3 rounded-lg text-white font-bold transition">
-                    <i class="fas fa-plus-square ml-3 text-lg electric-blue"></i> إضافة عرض جديد
-                </a>
-            </nav>
-            <div class="mt-auto pt-6 border-t border-gray-800">
-                <button onclick="clearToken()" class="flex items-center text-red-500 hover:text-red-400 font-bold transition">
-                    <i class="fas fa-power-off ml-2"></i> خروج آمن
-                </button>
-            </div>
-        </aside>
+    <div id="authOverlay">
+        <div class="auth-card">
+            <i class="fas fa-user-shield"></i>
+            <h2>دخول المشرف</h2>
+            <p>يرجى إدخال التوكن الخاص بك للوصول</p>
+            <input type="password" id="tokenInput" placeholder="ghp_xxxxxxxxxxxx">
+            <button class="btn-login" onclick="verifyToken()">تحقق ودخول</button>
+            <p class="error-msg" id="errorMsg">التوكن غير صحيح! حاول مجدداً.</p>
+        </div>
+    </div>
 
-        <main class="flex-1 p-4 md:p-10">
-            <div class="max-w-6xl mx-auto">
-                <div class="grid grid-cols-1 xl:grid-cols-12 gap-8">
-                    <div class="xl:col-span-5 luxury-card p-8 rounded-3xl shadow-2xl border-blue-900/20">
-                        <h3 class="text-xl font-bold mb-6 gold-text">إضافة عرض جديد</h3>
-                        <div class="space-y-4">
-                            <input type="text" id="p-name" class="w-full glass-input rounded-xl p-3 text-white" placeholder="اسم المنتج">
-                            <div class="grid grid-cols-2 gap-4">
-                                <select id="p-cat" class="w-full glass-input rounded-xl p-3 text-white">
-                                    <option value="Free Fire">🔥 Free Fire</option>
-                                    <option value="PUBG">🪂 PUBG Mobile</option>
-                                    <option value="Google Play">💳 Google Play</option>
-                                </select>
-                                <select id="p-type" class="w-full glass-input rounded-xl p-3 text-white">
-                                    <option value="Sale">بيع</option>
-                                    <option value="Buy">شراء</option>
-                                </select>
-                                <input type="number" id="p-price-da" class="w-full glass-input rounded-xl p-3 text-white" placeholder="السعر DA">
-                                <input type="number" id="p-price-usd" class="w-full glass-input rounded-xl p-3 text-white" placeholder="السعر $">
-                            </div>
-                            <input type="text" id="p-img" class="w-full glass-input rounded-xl p-3 text-white" placeholder="رابط الصورة">
-                            <input type="text" id="p-link" class="w-full glass-input rounded-xl p-3 text-white" placeholder="رابط تواصل البائع">
-                            <textarea id="p-desc" rows="3" class="w-full glass-input rounded-xl p-3 text-white" placeholder="وصف المنتج"></textarea>
-                            <button id="submit-btn" onclick="uploadToGithub()" class="w-full btn-luxury p-4 rounded-xl font-extrabold text-black">نشر العرض</button>
-                        </div>
-                        <div id="status" class="mt-4 text-center text-sm font-bold"></div>
-                    </div>
-                    <div class="xl:col-span-7">
-                        <div id="products-list" class="grid grid-cols-1 gap-4 max-h-[700px] overflow-y-auto"></div>
-                    </div>
-                </div>
+    <div class="container" id="mainApp">
+        <header>
+            <div class="logo"><i class="fas fa-store"></i> <h1>لوحة التحكم الفاخرة</h1></div>
+            <button class="add-product-btn" id="addProductBtn"><i class="fas fa-plus-circle"></i> إضافة منتج جديد</button>
+        </header>
+        
+        <main>
+            <div class="products-grid" id="productsGrid"></div>
+            <div class="empty-state" id="emptyState" style="text-align:center; padding:50px;">
+                <i class="fas fa-box-open" style="font-size: 50px; color:#ddd;"></i>
+                <h3>لا توجد منتجات</h3>
             </div>
         </main>
     </div>
 
-<script>
-    const REPO = "cheikh-mimo/DZ-STORE";
-    const FILE_PATH = "products.json";
+    <div class="modal" id="productModal">
+        <div class="modal-content">
+            <div class="modal-header" style="background: #1a2a6c; color: white; padding: 20px; display: flex; justify-content: space-between;">
+                <h2 id="modalTitle">إضافة منتج جديد</h2>
+                <span style="cursor:pointer; font-size:24px;" onclick="closeProductModal()">&times;</span>
+            </div>
+            <form id="productForm">
+                <div style="padding: 20px;">
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                        <div>
+                            <label>عنوان المنتج</label>
+                            <input type="text" id="productTitle" class="form-control" style="width:100%; padding:10px; margin-bottom:15px;" required>
+                            
+                            <label>فئة المنتج</label>
+                            <select id="productCategory" class="form-control" style="width:100%; padding:10px; margin-bottom:15px;">
+                                <option value="Free Fire">Free Fire</option>
+                                <option value="Efootball">Efootball</option>
+                            </select>
 
-    // --- الحل الثاني: طلب التوكن بدون صفحة LOGIN منفصلة ---
-    window.onload = function() {
-        if(!localStorage.getItem('gh_token_mimo')) {
-            let t = prompt("يرجى إدخال GitHub Token (ghp_...) للوصول للوحة التحكم:");
-            if(t && t.startsWith('ghp_')) {
-                localStorage.setItem('gh_token_mimo', t);
-                location.reload();
-            } else {
-                alert("التوكن مطلوب!");
-                document.body.innerHTML = "<h2 style='color:white; text-align:center; margin-top:50px;'>يجب إدخال التوكن لفتح اللوحة. أعد تحميل الصفحة.</h2>";
-            }
-        } else {
-            document.getElementById('main-content').style.display = 'flex';
-            loadProducts();
-        }
-    }
-
-    async function loadProducts() {
-        const token = localStorage.getItem('gh_token_mimo');
-        const listDiv = document.getElementById('products-list');
-        try {
-            const res = await fetch(`https://api.github.com/repos/${REPO}/contents/${FILE_PATH}`, {
-                headers: { 'Authorization': `token ${token}` }
-            });
-            if (res.ok) {
-                const data = await res.json();
-                const products = JSON.parse(decodeURIComponent(escape(atob(data.content))));
-                listDiv.innerHTML = products.reverse().map(p => `
-                    <div class="luxury-card p-4 rounded-2xl flex items-center gap-4 border-l-4 border-blue-500">
-                        <img src="${p.image || 'https://via.placeholder.com/60'}" class="w-12 h-12 rounded-lg object-cover">
-                        <div class="flex-1">
-                            <h4 class="font-bold gold-text">${p.name}</h4>
-                            <p class="text-xs text-gray-500">${p.priceDA} DA - ${p.category}</p>
+                            <label>صورة المنتج (من الجهاز)</label>
+                            <input type="file" id="productImageFile" accept="image/*" style="margin-bottom:10px;">
+                            <div class="image-preview" id="imagePreview">بدون صورة</div>
+                        </div>
+                        
+                        <div>
+                            <label>رابط البائع</label>
+                            <input type="url" id="sellerLink" class="form-control" style="width:100%; padding:10px; margin-bottom:15px;" required>
+                            
+                            <label>صيغة المنتج</label>
+                            <select id="productFormat" class="form-control" style="width:100%; padding:10px;">
+                                <option value="">اختر</option>
+                                <option value="بيع">بيع</option>
+                                <option value="طلب">طلب</option>
+                                <option value="تبادل">تبادل</option>
+                            </select>
                         </div>
                     </div>
-                `).join('');
-            }
-        } catch (e) { console.error(e); }
-    }
 
-    async function uploadToGithub() {
-        const token = localStorage.getItem('gh_token_mimo');
-        const btn = document.getElementById('submit-btn');
-        const status = document.getElementById('status');
-        const product = {
-            id: Date.now(),
-            name: document.getElementById('p-name').value,
-            category: document.getElementById('p-cat').value,
-            type: document.getElementById('p-type').value,
-            priceDA: document.getElementById('p-price-da').value,
-            priceUSD: document.getElementById('p-price-usd').value,
-            image: document.getElementById('p-img').value,
-            sellerLink: document.getElementById('p-link').value,
-            desc: document.getElementById('p-desc').value,
-            date: new Date().toLocaleDateString()
+                    <div class="conditional-section" id="priceSection">
+                        <label>السعر بالدولار</label> <input type="number" id="priceDollar" style="width:100%; padding:10px;">
+                        <label>السعر بالدينار</label> <input type="number" id="priceDinar" style="width:100%; padding:10px;">
+                    </div>
+                </div>
+                <div style="padding: 20px; text-align: left; background: #f9f9f9;">
+                    <button type="button" onclick="closeProductModal()" style="padding:10px 20px;">إلغاء</button>
+                    <button type="submit" id="saveBtn" style="padding:10px 20px; background: #1a2a6c; color:white; border:none; cursor:pointer;">حفظ ونشر</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // إعدادات GitHub (يجب تغيير هذه القيم)
+        const GITHUB_CONFIG = {
+            owner: 'YOUR_USERNAME', // اسم حسابك في جيت هب
+            repo: 'YOUR_REPO_NAME', // اسم المستودع
+            jsonPath: 'data/products.json', // مسار ملف المنتجات
+            imageFolder: 'assets/uploads' // مجلد الصور
         };
 
-        if(!product.name || !product.priceDA) return alert("أكمل البيانات!");
-        btn.disabled = true;
-        status.innerHTML = "جاري الرفع...";
+        let GITHUB_TOKEN = '';
 
-        try {
-            let sha = ""; let currentData = [];
-            const getRes = await fetch(`https://api.github.com/repos/${REPO}/contents/${FILE_PATH}`, {
-                headers: { 'Authorization': `token ${token}` }
-            });
-            if (getRes.ok) {
-                const fileData = await getRes.json();
-                sha = fileData.sha;
-                currentData = JSON.parse(decodeURIComponent(escape(atob(fileData.content))));
+        // 1. التحقق من التوكن عند فتح الصفحة
+        window.onload = () => {
+            const savedToken = localStorage.getItem('luxury_token');
+            if (savedToken) {
+                document.getElementById('tokenInput').value = savedToken;
+                verifyToken();
             }
-            currentData.push(product);
-            const putRes = await fetch(`https://api.github.com/repos/${REPO}/contents/${FILE_PATH}`, {
+        };
+
+        async function verifyToken() {
+            const input = document.getElementById('tokenInput');
+            const token = input.value.trim();
+            const btn = document.querySelector('.btn-login');
+
+            btn.innerText = 'جاري التحقق...';
+            
+            try {
+                const res = await fetch('https://api.github.com/user', {
+                    headers: { 'Authorization': `token ${token}` }
+                });
+
+                if (res.ok) {
+                    GITHUB_TOKEN = token;
+                    localStorage.setItem('luxury_token', token);
+                    document.getElementById('authOverlay').style.fadeOut = "slow";
+                    document.getElementById('authOverlay').style.display = 'none';
+                    document.getElementById('mainApp').style.display = 'block';
+                    loadProductsFromGithub();
+                } else {
+                    throw new Error();
+                }
+            } catch (e) {
+                input.classList.add('shake');
+                document.getElementById('errorMsg').style.display = 'block';
+                setTimeout(() => input.classList.remove('shake'), 500);
+            } finally {
+                btn.innerText = 'تحقق ودخول';
+            }
+        }
+
+        // 2. معالجة معاينة الصورة
+        document.getElementById('productImageFile').onchange = function(e) {
+            const reader = new FileReader();
+            reader.onload = function() {
+                const img = document.getElementById('imagePreview');
+                img.innerHTML = `<img src="${reader.result}">`;
+            };
+            reader.readAsDataURL(e.target.files[0]);
+        };
+
+        // 3. وظيفة الرفع المزدوج (الصورة ثم الـ JSON) دون فقدان الجودة
+        async function uploadToGithub(productData, file) {
+            const saveBtn = document.getElementById('saveBtn');
+            saveBtn.innerText = 'جاري رفع الصورة...';
+
+            let imageUrl = '';
+
+            // أولاً: رفع الصورة إذا وجدت
+            if (file) {
+                const fileName = `img_${Date.now()}_${file.name}`;
+                const base64Content = await toBase64(file);
+                const cleanBase64 = base64Content.split(',')[1];
+
+                const imgRes = await fetch(`https://api.github.com/repos/${GITHUB_CONFIG.owner}/${GITHUB_CONFIG.repo}/contents/${GITHUB_CONFIG.imageFolder}/${fileName}`, {
+                    method: 'PUT',
+                    headers: { 'Authorization': `token ${GITHUB_TOKEN}`, 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        message: `Upload image ${fileName}`,
+                        content: cleanBase64
+                    })
+                });
+                
+                if (imgRes.ok) {
+                    const imgData = await imgRes.json();
+                    imageUrl = imgData.content.download_url;
+                }
+            }
+
+            saveBtn.innerText = 'تحديث البيانات...';
+            productData.image = imageUrl;
+
+            // ثانياً: تحديث ملف JSON
+            await updateJsonFile(productData);
+            
+            saveBtn.innerText = 'حفظ ونشر';
+            closeProductModal();
+            loadProductsFromGithub();
+        }
+
+        async function updateJsonFile(newProduct) {
+            // جلب النسخة القديمة للحصول على الـ SHA (بصمة الملف)
+            const res = await fetch(`https://api.github.com/repos/${GITHUB_CONFIG.owner}/${GITHUB_CONFIG.repo}/contents/${GITHUB_CONFIG.jsonPath}`, {
+                headers: { 'Authorization': `token ${GITHUB_TOKEN}` }
+            });
+
+            let sha = '';
+            let currentProducts = [];
+
+            if (res.ok) {
+                const data = await res.json();
+                sha = data.sha;
+                currentProducts = JSON.parse(atob(data.content));
+            }
+
+            currentProducts.push(newProduct);
+
+            await fetch(`https://api.github.com/repos/${GITHUB_CONFIG.owner}/${GITHUB_CONFIG.repo}/contents/${GITHUB_CONFIG.jsonPath}`, {
                 method: 'PUT',
-                headers: { 'Authorization': `token ${token}`, 'Content-Type': 'application/json' },
+                headers: { 'Authorization': `token ${GITHUB_TOKEN}`, 'Content-Type': 'application/json' },
                 body: JSON.stringify({
-                    message: "New Product",
-                    content: btoa(unescape(encodeURIComponent(JSON.stringify(currentData, null, 2)))),
+                    message: 'Add new product',
+                    content: btoa(unescape(encodeURIComponent(JSON.stringify(currentProducts, null, 2)))),
                     sha: sha
                 })
             });
-            if (putRes.ok) {
-                status.innerHTML = "✅ نجح الرفع!";
-                loadProducts();
-            }
-        } catch (err) { status.innerHTML = "❌ خطأ!"; } finally { btn.disabled = false; }
-    }
+        }
 
-    function clearToken() { localStorage.removeItem('gh_token_mimo'); location.reload(); }
-</script>
+        const toBase64 = file => new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onload = () => resolve(reader.result);
+            reader.onerror = error => reject(error);
+        });
+
+        // 4. ربط النموذج بوظيفة الرفع
+        document.getElementById('productForm').onsubmit = async (e) => {
+            e.preventDefault();
+            const file = document.getElementById('productImageFile').files[0];
+            const data = {
+                id: Date.now(),
+                title: document.getElementById('productTitle').value,
+                category: document.getElementById('productCategory').value,
+                format: document.getElementById('productFormat').value,
+                priceDollar: document.getElementById('priceDollar').value,
+                priceDinar: document.getElementById('priceDinar').value,
+                sellerLink: document.getElementById('sellerLink').value
+            };
+            await uploadToGithub(data, file);
+        };
+
+        // دوال مساعدة لفتح وإغلاق المودال
+        document.getElementById('addProductBtn').onclick = () => document.getElementById('productModal').style.display='block';
+        function closeProductModal() { document.getElementById('productModal').style.display='none'; }
+        
+        // إظهار/إخفاء الأقسام (نفس منطق صديقك)
+        document.getElementById('productFormat').onchange = function() {
+            document.getElementById('priceSection').style.display = (this.value === 'بيع') ? 'block' : 'none';
+        };
+
+        async function loadProductsFromGithub() {
+            // هنا تضع كود عرض المنتجات من ملف الـ JSON
+            // سيعمل المتجر على قراءة نفس الملف لعرض المنتجات للزبائن
+        }
+    </script>
 </body>
 </html>
