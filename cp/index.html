@@ -108,7 +108,13 @@
 </div>
 
 <script>
-    const REPO = { owner: "Cheikh-mimo", repo: "DZ-STORE", path: "products.json" };
+    // تم تعديل المسار هنا ليصبح data/products.json
+    const REPO = { 
+        owner: "Cheikh-mimo", 
+        repo: "DZ-STORE", 
+        path: "data/products.json" 
+    };
+    
     let base64Images = [];
 
     function login() {
@@ -157,7 +163,7 @@
                     </div>
                 `;
             });
-        } catch(e) { grid.innerHTML = "المتجر فارغ أو يوجد خطأ في الاتصال."; }
+        } catch(e) { grid.innerHTML = "لم يتم العثور على المنتجات. تأكد من وجود ملف data/products.json"; }
     }
 
     function previewImages(input) {
@@ -218,7 +224,7 @@
                 document.getElementById('productForm').reset();
                 toggleView('list');
             }
-        } catch(err) { Swal.fire('خطأ', 'تأكد من إعدادات المستودع والتوكن', 'error'); }
+        } catch(err) { Swal.fire('خطأ', 'تأكد أن مجلد data يحتوي على ملف products.json', 'error'); }
     };
 
     async function deleteProduct(id) {
