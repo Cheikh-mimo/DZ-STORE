@@ -1,6 +1,6 @@
 backend:
   name: github
-  repo: cheikhchouaibcheikhchouaib-droid/ALG-STORE
+  repo: Cheikh-mimo/DZ-STORE  # ⚠️ غير هذا السطر!
   branch: main
   auth_type: token
 
@@ -9,68 +9,68 @@ public_folder: "/images/products"
 
 collections:
   - name: "products"
-    label: "ÇáãäÊÌÇÊ"
+    label: "المنتجات"
     folder: "products"
     create: true
     slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
     extension: "json"
     format: "json"
     fields:
-      - label: "ÇÓã ÇáãäÊÌ"
+      - label: "اسم المنتج"
         name: "title"
         widget: "string"
-        hint: "ãËÇá: ÍÓÇÈ Free Fire ãÓÊæì 65"
+        hint: "مثال: حساب Free Fire مستوى 65"
         
-      - label: "ÇáÝÆÉ"
+      - label: "الفئة"
         name: "category"
         widget: "select"
         options:
-          - { label: "Free Fire ??", value: "freefire" }
-          - { label: "PUBG ??", value: "pubg" }
-          - { label: "PES ?", value: "pes" }
-          - { label: "Google Play ??", value: "googleplay" }
-          - { label: "ÎÏãÇÊ ??", value: "services" }
+          - { label: "Free Fire 🔥", value: "freefire" }
+          - { label: "PUBG 🎯", value: "pubg" }
+          - { label: "PES ⚽", value: "pes" }
+          - { label: "Google Play 📱", value: "googleplay" }
+          - { label: "خدمات ⚙️", value: "services" }
         
-      - label: "äæÚ ÇáÚÑÖ"
+      - label: "نوع العرض"
         name: "type"
         widget: "select"
         options:
-          - { label: "?? ÈíÚ", value: "ÈíÚ" }
-          - { label: "?? ÔÑÇÁ", value: "ÔÑÇÁ" }
-          - { label: "?? ÊÈÇÏá", value: "ÊÈÇÏá" }
+          - { label: "💰 بيع", value: "بيع" }
+          - { label: "🛒 شراء", value: "شراء" }
+          - { label: "🔄 تبادل", value: "تبادل" }
         
-      - label: "ÇáÓÚÑ ÈÇáÏíäÇÑ ÇáÌÒÇÆÑí (DA)"
+      - label: "السعر بالدينار الجزائري (DA)"
         name: "priceDA"
         widget: "number"
         value_type: "int"
         min: 0
-        hint: "ãËÇá: 5000"
+        hint: "مثال: 5000"
         
-      - label: "ÇáÓÚÑ ÈÇáÏæáÇÑ ($)"
+      - label: "السعر بالدولار ($)"
         name: "priceUSD"
         widget: "number"
         value_type: "float"
         min: 0
         step: 0.01
-        hint: "ãËÇá: 35.50"
+        hint: "مثال: 35.50"
         
-      - label: "æÕÝ ÇáãäÊÌ / ÇáãæÇÕÝÇÊ"
+      - label: "وصف المنتج / المواصفات"
         name: "description"
         widget: "text"
-        hint: "ÇÐßÑ ãæÇÕÝÇÊ ÇáÍÓÇÈ ÈÇáÊÝÕíá: ÇááÝá¡ ÇáÔÎÕíÇÊ¡ ÇáÃÓáÍÉ¡ ÇáããíÒÇÊ¡ ÅáÎ..."
+        hint: "اذكر مواصفات الحساب بالتفصيل: اللفل، الشخصيات، الأسلحة، المميزات، إلخ..."
         
-      - label: "ÕæÑÉ ÇáãäÊÌ"
+      - label: "صورة المنتج"
         name: "image"
         widget: "image"
         allow_multiple: false
-        hint: "ÇÑÝÚ ÕæÑÉ æÇÖÍÉ ááÍÓÇÈ Ãæ ÇáãäÊÌ"
+        hint: "ارفع صورة واضحة للحساب أو المنتج"
         
-      - label: "ÑÇÈØ ÇáÈÇÆÚ"
+      - label: "رابط البائع"
         name: "sellerLink"
         widget: "string"
-        hint: "ÖÚ ÑÇÈØ ÇáæÇÊÓÇÈ Ãæ ÇáÝíÓÈæß Ãæ ÇáÊíáíÌÑÇã ááÈÇÆÚ ÇáÃÕáí (ãËÇá: https://wa.me/213xxxxxxxxx)"
+        hint: "ضع رابط الواتساب أو الفيسبوك أو التيليجرام للبائع الأصلي (مثال: https://wa.me/213xxxxxxxxx)"
         
-      - label: "ÊÇÑíÎ ÇáäÔÑ"
+      - label: "تاريخ النشر"
         name: "date"
         widget: "datetime"
         default: ""
