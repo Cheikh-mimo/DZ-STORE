@@ -1,0 +1,79 @@
+backend:
+  name: github
+  repo: cheikhchouaibcheikhchouaib-droid/ALG-STORE
+  branch: main
+  auth_type: token
+
+media_folder: "images/products"
+public_folder: "/images/products"
+
+collections:
+  - name: "products"
+    label: "«·„‰ Ã« "
+    folder: "products"
+    create: true
+    slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
+    extension: "json"
+    format: "json"
+    fields:
+      - label: "«”„ «·„‰ Ã"
+        name: "title"
+        widget: "string"
+        hint: "„À«·: Õ”«» Free Fire „” ÊÏ 65"
+        
+      - label: "«·›∆…"
+        name: "category"
+        widget: "select"
+        options:
+          - { label: "Free Fire ??", value: "freefire" }
+          - { label: "PUBG ??", value: "pubg" }
+          - { label: "PES ?", value: "pes" }
+          - { label: "Google Play ??", value: "googleplay" }
+          - { label: "Œœ„«  ??", value: "services" }
+        
+      - label: "‰Ê⁄ «·⁄—÷"
+        name: "type"
+        widget: "select"
+        options:
+          - { label: "?? »Ì⁄", value: "»Ì⁄" }
+          - { label: "?? ‘—«¡", value: "‘—«¡" }
+          - { label: "??  »«œ·", value: " »«œ·" }
+        
+      - label: "«·”⁄— »«·œÌ‰«— «·Ã“«∆—Ì (DA)"
+        name: "priceDA"
+        widget: "number"
+        value_type: "int"
+        min: 0
+        hint: "„À«·: 5000"
+        
+      - label: "«·”⁄— »«·œÊ·«— ($)"
+        name: "priceUSD"
+        widget: "number"
+        value_type: "float"
+        min: 0
+        step: 0.01
+        hint: "„À«·: 35.50"
+        
+      - label: "Ê’› «·„‰ Ã / «·„Ê«’›« "
+        name: "description"
+        widget: "text"
+        hint: "«–ﬂ— „Ê«’›«  «·Õ”«» »«· ›’Ì·: «··›·° «·‘Œ’Ì« ° «·√”·Õ…° «·„„Ì“« ° ≈·Œ..."
+        
+      - label: "’Ê—… «·„‰ Ã"
+        name: "image"
+        widget: "image"
+        allow_multiple: false
+        hint: "«—›⁄ ’Ê—… Ê«÷Õ… ··Õ”«» √Ê «·„‰ Ã"
+        
+      - label: "—«»ÿ «·»«∆⁄"
+        name: "sellerLink"
+        widget: "string"
+        hint: "÷⁄ —«»ÿ «·Ê« ”«» √Ê «·›Ì”»Êﬂ √Ê «· Ì·ÌÃ—«„ ··»«∆⁄ «·√’·Ì („À«·: https://wa.me/213xxxxxxxxx)"
+        
+      - label: " «—ÌŒ «·‰‘—"
+        name: "date"
+        widget: "datetime"
+        default: ""
+        date_format: "YYYY-MM-DD"
+        time_format: "HH:mm"
+        format: "YYYY-MM-DD HH:mm"
