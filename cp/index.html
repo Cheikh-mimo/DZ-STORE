@@ -1,57 +1,128 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="robots" content="noindex">
-    <title>لوحة التحكم - DZ Store</title>
+    <title>لوحة تحكم ALG-STORE</title>
     <style>
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            margin: 0;
-            padding: 0;
-            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 100%);
-        }
+        body { font-family: sans-serif; background: #020617; color: white; display: flex; justify-content: center; padding: 20px; }
+        .container { background: #0f172a; padding: 25px; border-radius: 12px; width: 100%; max-width: 400px; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1); }
+        h2 { text-align: center; color: #22c55e; }
+        input, textarea { width: 100%; padding: 12px; margin: 10px 0; border-radius: 6px; border: 1px solid #1e293b; background: #1e293b; color: white; box-sizing: border-box; }
+        button { width: 100%; padding: 12px; background: #22c55e; border: none; color: white; font-weight: bold; border-radius: 6px; cursor: pointer; transition: 0.3s; }
+        button:hover { background: #16a34a; }
+        .status { margin-top: 15px; font-size: 14px; text-align: center; }
     </style>
-    <script>
-        window.CMS_MANUAL_INIT = true;
-    </script>
 </head>
 <body>
-    <script src="https://unpkg.com/decap-cms@^3.1.0/dist/decap-cms.js"></script>
-    <script>
-        CMS.init({
-            config: {
-                backend: {
-                    name: 'github',
-                    repo: 'Cheikh-mimo/DZ-STORE',
-                    branch: 'main'
-                }
+
+<div class="container">
+    <h2>إضافة منتج جديد</h2>
+    
+    <div id="auth-section">
+        <input type="password" id="github-token" placeholder="أدخل GitHub Token (مرة واحدة)">
+        <button onclick="saveToken()">حفظ المفتاح والبدء</button>
+    </div>
+
+    <div id="product-section" style="display:none;">
+        <input type="text" id="p-name" placeholder="اسم المنتج">
+        <input type="number" id="p-price" placeholder="السعر">
+        <textarea id="p-desc" placeholder="وصف قصير"></textarea>
+        <button id="submit-btn" onclick="uploadToGithub()">نشر المنتج في المتجر</button>
+        <button onclick="clearToken()" style="background:#ef4444; margin-top:10px;">تسجيل الخروج</button>
+    </div>
+
+    <div id="status" class="status"></div>
+</div>
+
+<script>
+    const REPO = "cheikhchouaibcheikhchouaib-droid/ALG-STORE";
+    const FILE_PATH = "data.json"; // سيتم حفظ المنتجات في هذا الملف
+
+    // 1. التحقق من وجود التوكن
+    if(localStorage.getItem('gh_token')) {
+        showProductSection();
+    }
+
+    function saveToken() {
+        const token = document.getElementById('github-token').value;
+        if(token) {
+            localStorage.setItem('gh_token', token);
+            showProductSection();
+        }
+    }
+
+    function showProductSection() {
+        document.getElementById('auth-section').style.display = 'none';
+        document.getElementById('product-section').style.display = 'block';
+    }
+
+    function clearToken() {
+        localStorage.removeItem('gh_token');
+        location.reload();
+    }
+
+    // 2. الوظيفة الأساسية: الرفع إلى GitHub API
+    async function uploadToGithub() {
+        const token = localStorage.getItem('gh_token');
+        const name = document.getElementById('p-name').value;
+        const price = document.getElementById('p-price').value;
+        const desc = document.getElementById('p-desc').value;
+        const btn = document.getElementById('submit-btn');
+        const status = document.getElementById('status');
+
+        if(!name || !price) return alert("يرجى ملء البيانات");
+
+        btn.disabled = true;
+        status.innerText = "جاري الاتصال بـ GitHub...";
+
+        try {
+            // أ. جلب الملف الحالي لوضع المنتج الجديد معه
+            let sha = "";
+            let currentProducts = [];
+            
+            const getRes = await fetch(`https://api.github.com/repos/${REPO}/contents/${FILE_PATH}`, {
+                headers: { 'Authorization': `token ${token}` }
+            });
+
+            if (getRes.ok) {
+                const fileData = await getRes.json();
+                sha = fileData.sha;
+                currentProducts = JSON.parse(atob(fileData.content));
             }
-        });
-    </script>
+
+            // ب. إضافة المنتج الجديد للقائمة
+            currentProducts.push({ id: Date.now(), name, price, desc });
+
+            // ج. رفع الملف المحدث
+            const putRes = await fetch(`https://api.github.com/repos/${REPO}/contents/${FILE_PATH}`, {
+                method: 'PUT',
+                headers: {
+                    'Authorization': `token ${token}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    message: `إضافة منتج: ${name}`,
+                    content: btoa(unescape(encodeURIComponent(JSON.stringify(currentProducts, null, 2)))),
+                    sha: sha
+                })
+            });
+
+            if (putRes.ok) {
+                status.style.color = "#22c55e";
+                status.innerText = "✅ تم نشر المنتج بنجاح!";
+                document.getElementById('p-name').value = "";
+                document.getElementById('p-price').value = "";
+            } else {
+                throw new Error("فشل التحديث");
+            }
+        } catch (err) {
+            status.style.color = "#ef4444";
+            status.innerText = "❌ خطأ في التوكن أو الاتصال";
+        } finally {
+            btn.disabled = false;
+        }
+    }
+</script>
 </body>
 </html>
-```
-
----
-
-## 🔧 **ما الذي تغير؟**
-
-1. ✅ أضفنا `window.CMS_MANUAL_INIT = true` → يمنع التهيئة التلقائية
-2. ✅ أضفنا `CMS.init()` يدوياً مع إعدادات GitHub **صريحة**
-3. ✅ حدثنا نسخة المكتبة لـ `3.1.0` (الأحدث)
-
----
-
-## 📝 **الخطوات:**
-
-1. **عدّل ملف `cp/index.html`** في GitHub
-2. **استبدل كل محتواه** بالكود أعلاه ☝️
-3. **احفظ التعديل** (Commit changes)
-4. **انتظر دقيقتين** (مهم!)
-5. **افتح متصفح Firefox** (إذا لم يكن عندك، حمّله)
-6. **اذهب إلى:**
-```
-   https://cheikh-mimo.github.io/DZ-STORE/cp/
