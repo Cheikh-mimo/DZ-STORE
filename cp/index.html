@@ -4,7 +4,8 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>لوحة التحكم - ALG Store</title>
+    <meta name="robots" content="noindex">
+    <title>لوحة التحكم - DZ Store</title>
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -13,8 +14,44 @@
             background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 100%);
         }
     </style>
+    <script>
+        window.CMS_MANUAL_INIT = true;
+    </script>
 </head>
 <body>
-    <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
+    <script src="https://unpkg.com/decap-cms@^3.1.0/dist/decap-cms.js"></script>
+    <script>
+        CMS.init({
+            config: {
+                backend: {
+                    name: 'github',
+                    repo: 'Cheikh-mimo/DZ-STORE',
+                    branch: 'main'
+                }
+            }
+        });
+    </script>
 </body>
 </html>
+```
+
+---
+
+## 🔧 **ما الذي تغير؟**
+
+1. ✅ أضفنا `window.CMS_MANUAL_INIT = true` → يمنع التهيئة التلقائية
+2. ✅ أضفنا `CMS.init()` يدوياً مع إعدادات GitHub **صريحة**
+3. ✅ حدثنا نسخة المكتبة لـ `3.1.0` (الأحدث)
+
+---
+
+## 📝 **الخطوات:**
+
+1. **عدّل ملف `cp/index.html`** في GitHub
+2. **استبدل كل محتواه** بالكود أعلاه ☝️
+3. **احفظ التعديل** (Commit changes)
+4. **انتظر دقيقتين** (مهم!)
+5. **افتح متصفح Firefox** (إذا لم يكن عندك، حمّله)
+6. **اذهب إلى:**
+```
+   https://cheikh-mimo.github.io/DZ-STORE/cp/
