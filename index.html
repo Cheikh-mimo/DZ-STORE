@@ -3,104 +3,96 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DZ-STORE | المتجر الرئيسي</title>
+    <title>DZ-STORE | المتجر</title>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        :root { --main: #1a2a6c; --blue: #0084ff; }
-        * { font-family: 'Cairo', sans-serif; }
-        body { background: #f0f2f5; margin: 0; padding: 20px; }
+        :root { --primary: #0084ff; --dark: #1a1a1a; }
+        * { font-family: 'Cairo', sans-serif; box-sizing: border-box; }
+        body { background-color: #f4f6f8; margin: 0; padding-bottom: 50px; }
         
-        .shop-header { text-align: center; padding: 40px; background: var(--main); color: white; border-radius: 15px; margin-bottom: 30px; }
+        .header { background: #1a2a6c; color: white; text-align: center; padding: 30px; margin-bottom: 30px; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; max-width: 1200px; margin: 0 auto; padding: 0 15px; }
         
-        .products-container { 
-            display: grid; 
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); 
-            gap: 20px; 
-            max-width: 1200px; margin: 0 auto;
-        }
-
-        .card { 
-            background: white; border-radius: 15px; overflow: hidden; 
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1); transition: 0.3s;
-        }
-        .card:hover { transform: translateY(-10px); }
+        .card { background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.1); border: 1px solid #eee; }
+        .card-img { width: 100%; height: 200px; object-fit: cover; }
+        .card-content { padding: 15px; }
         
-        .card-img { 
-            width: 100%; height: 200px; object-fit: cover; 
-            background: #eee; border-bottom: 3px solid var(--blue);
-        }
-
-        .card-content { padding: 20px; }
-        .price-tag { color: var(--blue); font-weight: bold; font-size: 1.2rem; margin: 10px 0; }
+        /* تنسيق عرض السعر */
+        .price-container { display: flex; justify-content: space-between; align-items: center; margin: 15px 0; padding: 10px; background: #f9f9f9; border-radius: 8px; }
+        .price-da { color: #16a34a; font-weight: bold; font-size: 1.2rem; }
+        .price-usd { color: #666; font-size: 0.9rem; border-right: 2px solid #ddd; padding-right: 10px; }
         
-        .buy-btn { 
-            display: block; width: 100%; padding: 12px; margin-top: 15px;
-            background: var(--blue); color: white; text-align: center;
-            text-decoration: none; border-radius: 8px; font-weight: bold;
-            transition: 0.3s;
+        .buy-link { 
+            display: flex; align-items: center; justify-content: center; gap: 10px;
+            background: var(--primary); color: white; text-decoration: none;
+            padding: 12px; border-radius: 8px; font-weight: bold; transition: 0.3s;
         }
-        .buy-btn:hover { background: #0073e6; }
-
-        #loader { text-align: center; padding: 50px; font-size: 1.5rem; color: var(--main); }
+        .buy-link:hover { background: #0073e6; transform: scale(1.02); }
+        
+        #loader { text-align: center; margin-top: 50px; font-weight: bold; color: #666; }
     </style>
 </head>
 <body>
 
-    <div class="shop-header">
-        <h1>DZ-STORE <i class="fas fa-shopping-cart"></i></h1>
-        <p>أفضل الحسابات والخدمات بأعلى جودة في الجزائر</p>
+    <div class="header">
+        <h1>DZ-STORE</h1>
+        <p>جودة واحترافية في التعامل</p>
     </div>
 
-    <div id="loader">جاري جلب العروض...</div>
-    <div class="products-container" id="shopGrid"></div>
+    <div id="loader"><i class="fas fa-sync fa-spin"></i> جاري تحديث قائمة الأسعار...</div>
+    <div class="grid" id="mainGrid"></div>
 
     <script>
-        // --- إعدادات مستودعك ---
-        const REPO_OWNER = 'Cheikh-mimo';
-        const REPO_NAME = 'DZ-STORE';
-        const JSON_PATH = 'data/products.json';
+        const CONFIG = {
+            owner: 'Cheikh-mimo',
+            repo: 'DZ-STORE',
+            path: 'data/products.json'
+        };
 
-        // رابط البيانات الخام
-        const URL = `https://raw.githubusercontent.com/${REPO_OWNER}/${REPO_NAME}/main/${JSON_PATH}`;
+        const URL = `https://raw.githubusercontent.com/${CONFIG.owner}/${CONFIG.repo}/main/${CONFIG.path}`;
 
-        async function fetchProducts() {
+        async function initStore() {
             try {
-                // إضافة t لمنع الكاش وجلب الجديد فوراً
-                const response = await fetch(URL + '?t=' + Date.now());
-                const products = await response.json();
+                // استخدام الكاش باستير لضمان جلب أحدث الأسعار
+                const response = await fetch(URL + '?nocache=' + new Date().getTime());
+                const data = await response.json();
                 
+                render(data);
                 document.getElementById('loader').style.display = 'none';
-                displayProducts(products);
-            } catch (error) {
-                document.getElementById('loader').innerHTML = "لا توجد منتجات حالياً أو المتجر تحت الصيانة 🛠️";
-                console.error("Error:", error);
+            } catch (err) {
+                document.getElementById('loader').innerHTML = "⚠️ خطأ في تحميل البيانات. تأكد من إضافة منتجات من لوحة التحكم.";
             }
         }
 
-        function displayProducts(products) {
-            const grid = document.getElementById('shopGrid');
-            grid.innerHTML = ''; 
-
-            products.reverse().forEach(item => { 
-                grid.innerHTML += `
+        function render(items) {
+            const grid = document.getElementById('mainGrid');
+            grid.innerHTML = items.reverse().map(item => {
+                // تأكد من أن الرابط يبدأ بـ http ليعمل الانتقال بشكل صحيح
+                const fbLink = item.sellerLink.startsWith('http') ? item.sellerLink : `https://${item.sellerLink}`;
+                
+                return `
                     <div class="card">
-                        <img src="${item.image || 'https://via.placeholder.com/300x200?text=No+Image'}" 
-                             class="card-img" alt="${item.title}">
+                        <img src="${item.image}" class="card-img" onerror="this.src='https://via.placeholder.com/300x200?text=No+Image'">
                         <div class="card-content">
-                            <span style="font-size: 0.8rem; background: #e7f3ff; color: #1877f2; padding: 3px 8px; border-radius: 5px;">${item.category}</span>
-                            <h3 style="margin: 10px 0;">${item.title}</h3>
-                            <div class="price-tag">${item.priceDinar} DA / $${item.priceDollar}</div>
-                            <a href="${item.sellerLink}" target="_blank" class="buy-btn">
-                                <i class="fab fa-facebook-messenger"></i> اطلب الآن عبر فيسبوك
+                            <div style="font-size: 0.8rem; color: var(--primary); font-weight: bold;">${item.category}</div>
+                            <h3 style="margin: 5px 0;">${item.title}</h3>
+                            
+                            <div class="price-container">
+                                <div class="price-da">${item.priceDinar} DA</div>
+                                <div class="price-usd">${item.priceDollar} $</div>
+                            </div>
+
+                            <a href="${fbLink}" target="_blank" rel="noopener noreferrer" class="buy-link">
+                                <i class="fab fa-facebook"></i> مراسلة البائع
                             </a>
                         </div>
                     </div>
                 `;
-            });
+            }).join('');
         }
 
-        fetchProducts();
+        initStore();
     </script>
 </body>
 </html>
