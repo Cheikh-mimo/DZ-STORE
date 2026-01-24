@@ -1,161 +1,199 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>لوحة تحكم DZ-STORE الآمنة</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
+    <title>DZ-STORE | Admin Management</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        * { font-family: 'Cairo', sans-serif; box-sizing: border-box; }
-        body { background-color: #f0f2f5; padding: 20px; display: flex; justify-content: center; }
-        .container { max-width: 500px; width: 100%; background: white; padding: 25px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
-        h2 { text-align: center; color: #1a2a6c; margin-bottom: 20px; }
-        .form-group { margin-bottom: 15px; }
-        label { display: block; margin-bottom: 5px; font-weight: bold; color: #444; }
-        input, select { width: 100%; padding: 10px; border: 1px solid #ccd0d5; border-radius: 8px; }
-        .btn-submit { width: 100%; padding: 12px; background: #0084ff; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; margin-top: 10px; }
-        #status { margin-top: 15px; padding: 10px; border-radius: 8px; display: none; text-align: center; }
-        .success { background: #e7f3ff; color: #1877f2; display: block !important; }
-        .error { background: #ffebe8; color: #f02849; display: block !important; }
-        .token-box { background: #fff9e6; border: 1px dashed #ffd966; padding: 10px; border-radius: 8px; margin-bottom: 20px; }
+        :root { --primary: #2563eb; --danger: #dc2626; --success: #16a34a; --bg: #f8fafc; }
+        body { font-family: 'Inter', sans-serif; background: var(--bg); margin: 0; padding: 20px; }
+        
+        /* Login Overlay */
+        #loginOverlay { position: fixed; inset: 0; background: rgba(0,0,0,0.8); display: flex; align-items: center; justify-content: center; z-index: 9999; }
+        .login-box { background: white; padding: 40px; border-radius: 12px; text-align: center; width: 100%; max-width: 400px; }
+        
+        /* Header */
+        .admin-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; background: white; padding: 20px; border-radius: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+        
+        /* Product Grid */
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; }
+        .product-card { background: white; border-radius: 12px; padding: 15px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); position: relative; }
+        .product-img { width: 100%; height: 180px; object-fit: cover; border-radius: 8px; margin-bottom: 10px; }
+        .actions { display: flex; gap: 10px; margin-top: 15px; }
+        
+        button { cursor: pointer; border: none; border-radius: 6px; padding: 10px 16px; font-weight: 600; transition: 0.2s; }
+        .btn-add { background: var(--primary); color: white; }
+        .btn-edit { background: #e2e8f0; color: #475569; flex: 1; }
+        .btn-delete { background: #fee2e2; color: var(--danger); flex: 1; }
+        
+        /* Modal */
+        .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); align-items: center; justify-content: center; }
+        .modal-content { background: white; padding: 30px; border-radius: 12px; width: 500px; max-width: 90%; }
+        input, select { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #cbd5e1; border-radius: 8px; }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <h2><i class="fas fa-lock-open"></i> إضافة منتج جديد</h2>
-    
-    <div class="token-box">
-        <label><i class="fas fa-key"></i> مفتاح الإدارة (التوكن):</label>
-        <input type="password" id="adminToken" placeholder="أدخل التوكن الخاص بك هنا">
-        <small style="color: #666;">* لن يتم حفظ التوكن، أنت فقط من يملك الصلاحية.</small>
+    <div id="loginOverlay">
+        <div class="login-box">
+            <h2>Admin Login</h2>
+            <p>Please enter your GitHub Token</p>
+            <input type="password" id="tokenInput" placeholder="ghp_xxxxxxxxxxxx">
+            <button class="btn-add" style="width: 100%; margin-top: 15px;" onclick="handleLogin()">Login</button>
+        </div>
     </div>
 
-    <div id="status"></div>
+    <div id="dashboard" style="display:none;">
+        <header class="admin-header">
+            <h1>DZ-STORE Panel</h1>
+            <button class="btn-add" onclick="openModal()"><i class="fas fa-plus"></i> Add Product</button>
+        </header>
 
-    <div class="form-group">
-        <label>اسم المنتج:</label>
-        <input type="text" id="title">
+        <div id="productGrid" class="grid">
+            </div>
     </div>
 
-    <div class="form-group">
-        <label>الفئة:</label>
-        <select id="category">
-            <option value="efootball">efootball</option>
-            <option value="free fire">free fire</option>
-            <option value="google play">google play</option>
-            <option value="$">$</option>
-        </select>
+    <div id="productModal" class="modal">
+        <div class="modal-content">
+            <h3 id="modalTitle">Add New Product</h3>
+            <input type="hidden" id="editId">
+            <input type="text" id="pTitle" placeholder="Product Title">
+            <select id="pCategory">
+                <option value="efootball">efootball</option>
+                <option value="free fire">free fire</option>
+                <option value="google play">google play</option>
+                <option value="$">$</option>
+            </select>
+            <input type="number" id="pPriceDinar" placeholder="Price in DA">
+            <input type="number" id="pPriceDollar" placeholder="Price in $">
+            <input type="url" id="pLink" placeholder="Facebook Profile Link">
+            <input type="file" id="pImage" accept="image/*">
+            <div style="display:flex; gap:10px; margin-top:20px;">
+                <button class="btn-add" onclick="saveProduct()" style="flex:2;">Save Product</button>
+                <button onclick="closeModal()" style="flex:1;">Cancel</button>
+            </div>
+        </div>
     </div>
 
-    <div class="form-group">
-        <label>السعر بالدينار (DA):</label>
-        <input type="number" id="priceDinar">
-    </div>
+    <script>
+        const REPO_OWNER = 'Cheikh-mimo';
+        const REPO_NAME = 'DZ-STORE';
+        const JSON_PATH = 'data/products.json';
+        let G_TOKEN = '';
+        let allProducts = [];
+        let currentSha = '';
 
-    <div class="form-group">
-        <label>السعر بالدولار ($):</label>
-        <input type="number" id="priceDollar">
-    </div>
-
-    <div class="form-group">
-        <label>رابط حساب فيسبوك:</label>
-        <input type="url" id="sellerLink">
-    </div>
-
-    <div class="form-group">
-        <label>صورة المنتج:</label>
-        <input type="file" id="imageInput" accept="image/*">
-    </div>
-
-    <button class="btn-submit" id="submitBtn" onclick="uploadProduct()">نشر المنتج</button>
-</div>
-
-<script>
-    const REPO_OWNER = 'Cheikh-mimo';
-    const REPO_NAME = 'DZ-STORE';
-    const JSON_PATH = 'data/products.json';
-
-    async function uploadProduct() {
-        const token = document.getElementById('adminToken').value;
-        if(!token) return alert("يرجى إدخال مفتاح الإدارة أولاً!");
-
-        const btn = document.getElementById('submitBtn');
-        const status = document.getElementById('status');
-        const fileInput = document.getElementById('imageInput');
-        
-        btn.disabled = true;
-        btn.innerHTML = 'جاري المعالجة...';
-
-        try {
-            const imageBase64 = await toBase64(fileInput.files[0]);
-            const imageName = `img_${Date.now()}.png`;
-            
-            // 1. رفع الصورة
-            const imgRes = await fetch(`https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/assets/uploads/${imageName}`, {
-                method: 'PUT',
-                headers: { 'Authorization': `token ${token}`, 'Content-Type': 'application/json' },
-                body: JSON.stringify({ message: "upload image", content: imageBase64.split(',')[1] })
-            });
-
-            if(!imgRes.ok) throw new Error("التوكن غير صحيح أو لا يملك صلاحية");
-
-            const imgData = await imgRes.json();
-            const imageUrl = imgData.content.download_url;
-
-            // 2. تحديث JSON
-            let sha = "";
-            let products = [];
-            const res = await fetch(`https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/${JSON_PATH}?t=${Date.now()}`, {
-                headers: { 'Authorization': `token ${token}` }
-            });
-
-            if (res.ok) {
-                const data = await res.json();
-                sha = data.sha;
-                products = JSON.parse(decodeURIComponent(escape(atob(data.content))));
+        function handleLogin() {
+            G_TOKEN = document.getElementById('tokenInput').value;
+            if(G_TOKEN.startsWith('ghp_')) {
+                document.getElementById('loginOverlay').style.display = 'none';
+                document.getElementById('dashboard').style.display = 'block';
+                loadProducts();
+            } else {
+                alert("Invalid Token Format!");
             }
-
-            products.push({
-                id: Date.now(),
-                title: document.getElementById('title').value,
-                category: document.getElementById('category').value,
-                priceDinar: document.getElementById('priceDinar').value,
-                priceDollar: document.getElementById('priceDollar').value,
-                sellerLink: document.getElementById('sellerLink').value,
-                image: imageUrl
-            });
-
-            const finalRes = await fetch(`https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/${JSON_PATH}`, {
-                method: 'PUT',
-                headers: { 'Authorization': `token ${token}`, 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    message: "update list",
-                    content: btoa(unescape(encodeURIComponent(JSON.stringify(products, null, 2)))),
-                    sha: sha
-                })
-            });
-
-            if (finalRes.ok) {
-                status.className = "success";
-                status.innerHTML = "تم النشر بنجاح! ✅";
-            }
-        } catch (err) {
-            status.className = "error";
-            status.innerHTML = "خطأ: " + err.message;
-        } finally {
-            btn.disabled = false;
-            btn.innerHTML = 'نشر المنتج';
         }
-    }
 
-    const toBase64 = file => new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.readAsDataURL(file);
-        reader.onload = () => resolve(reader.result);
-        reader.onerror = error => reject(error);
-    });
-</script>
+        async function loadProducts() {
+            try {
+                const res = await fetch(`https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/${JSON_PATH}?t=${Date.now()}`, {
+                    headers: { 'Authorization': `token ${G_TOKEN}` }
+                });
+                if(res.ok) {
+                    const data = await res.json();
+                    currentSha = data.sha;
+                    allProducts = JSON.parse(decodeURIComponent(escape(atob(data.content))));
+                    renderGrid();
+                }
+            } catch (e) { console.log("Init empty store"); }
+        }
+
+        function renderGrid() {
+            const grid = document.getElementById('productGrid');
+            grid.innerHTML = allProducts.map((p, index) => `
+                <div class="product-card">
+                    <img src="${p.image}" class="product-img">
+                    <div style="font-weight:bold; font-size:1.1rem;">${p.title}</div>
+                    <div style="color:#64748b; font-size:0.9rem;">${p.category} | ${p.priceDinar} DA</div>
+                    <div class="actions">
+                        <button class="btn-edit" onclick="editProduct(${index})">Edit</button>
+                        <button class="btn-delete" onclick="deleteProduct(${index})">Delete</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        async function saveProduct() {
+            const pId = document.getElementById('editId').value;
+            const file = document.getElementById('pImage').files[0];
+            let imageUrl = pId ? allProducts[pId].image : "";
+
+            if (file) {
+                const reader = new FileReader();
+                reader.readAsDataURL(file);
+                imageUrl = await new Promise(res => {
+                    reader.onload = async () => {
+                        const upload = await fetch(`https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/assets/uploads/img_${Date.now()}.png`, {
+                            method: 'PUT',
+                            headers: { 'Authorization': `token ${G_TOKEN}` },
+                            body: JSON.stringify({ message: "upload", content: reader.result.split(',')[1] })
+                        });
+                        const d = await upload.json();
+                        res(d.content.download_url);
+                    }
+                });
+            }
+
+            const productData = {
+                id: pId ? allProducts[pId].id : Date.now(),
+                title: document.getElementById('pTitle').value,
+                category: document.getElementById('pCategory').value,
+                priceDinar: document.getElementById('pPriceDinar').value,
+                priceDollar: document.getElementById('pPriceDollar').value,
+                sellerLink: document.getElementById('pLink').value,
+                image: imageUrl
+            };
+
+            if(pId) allProducts[pId] = productData;
+            else allProducts.push(productData);
+
+            await pushToGitHub();
+            closeModal();
+            loadProducts();
+        }
+
+        async function deleteProduct(index) {
+            if(confirm("Delete this item?")) {
+                allProducts.splice(index, 1);
+                await pushToGitHub();
+                loadProducts();
+            }
+        }
+
+        async function pushToGitHub() {
+            const content = btoa(unescape(encodeURIComponent(JSON.stringify(allProducts, null, 2))));
+            await fetch(`https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/${JSON_PATH}`, {
+                method: 'PUT',
+                headers: { 'Authorization': `token ${G_TOKEN}` },
+                body: JSON.stringify({ message: "Update Data", content, sha: currentSha })
+            });
+        }
+
+        // UI Helpers
+        function openModal() { document.getElementById('productModal').style.display = 'flex'; document.getElementById('editId').value = ""; }
+        function closeModal() { document.getElementById('productModal').style.display = 'none'; }
+        function editProduct(index) {
+            const p = allProducts[index];
+            document.getElementById('editId').value = index;
+            document.getElementById('pTitle').value = p.title;
+            document.getElementById('pCategory').value = p.category;
+            document.getElementById('pPriceDinar').value = p.priceDinar;
+            document.getElementById('pPriceDollar').value = p.priceDollar;
+            document.getElementById('pLink').value = p.sellerLink;
+            document.getElementById('productModal').style.display = 'flex';
+        }
+    </script>
 </body>
 </html>
