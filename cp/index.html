@@ -19,27 +19,19 @@
         .sidebar-link:hover { background: rgba(59, 130, 246, 0.1); border-right: 4px solid #3b82f6; }
     </style>
 </head>
-<body class="overflow-x-hidden">
+<body>
 
-    <div class="min-h-screen flex flex-col md:flex-row">
+    <div id="main-content" class="min-h-screen flex flex-col md:flex-row" style="display:none;">
         <aside class="w-full md:w-72 luxury-card p-6 flex flex-col shadow-2xl">
             <div class="mb-10 text-center">
                 <h1 class="text-3xl font-extrabold gold-text tracking-tighter italic">DZ-STORE</h1>
                 <p class="text-[10px] electric-blue font-bold uppercase tracking-[0.2em]">Gaming Luxury Dashboard</p>
             </div>
-            
             <nav class="flex-1 space-y-2 text-sm">
                 <a href="#" class="sidebar-link flex items-center p-3 rounded-lg text-white font-bold transition">
                     <i class="fas fa-plus-square ml-3 text-lg electric-blue"></i> إضافة عرض جديد
                 </a>
-                <a href="#" class="sidebar-link flex items-center p-3 rounded-lg text-gray-400 transition hover:text-white">
-                    <i class="fas fa-gamepad ml-3 text-lg"></i> إدارة الألعاب
-                </a>
-                <a href="#" class="sidebar-link flex items-center p-3 rounded-lg text-gray-400 transition hover:text-white">
-                    <i class="fas fa-wallet ml-3 text-lg"></i> المبيعات
-                </a>
             </nav>
-
             <div class="mt-auto pt-6 border-t border-gray-800">
                 <button onclick="clearToken()" class="flex items-center text-red-500 hover:text-red-400 font-bold transition">
                     <i class="fas fa-power-off ml-2"></i> خروج آمن
@@ -49,95 +41,33 @@
 
         <main class="flex-1 p-4 md:p-10">
             <div class="max-w-6xl mx-auto">
-                
-                <div class="flex flex-col md:flex-row justify-between items-center mb-10 gap-4">
-                    <div>
-                        <h2 class="text-2xl font-bold text-white flex items-center">
-                            <span class="w-2 h-8 bg-blue-600 rounded-full ml-3"></span>
-                            نظام العروض المتقدمة
-                        </h2>
-                    </div>
-                    <div class="flex gap-4">
-                        <div class="luxury-card px-6 py-2 rounded-full border border-blue-900/30 text-xs">
-                            <span class="text-gray-400">حالة المستودع:</span> <span class="text-green-400">متصل <i class="fas fa-circle text-[8px] animate-pulse"></i></span>
-                        </div>
-                    </div>
-                </div>
-
                 <div class="grid grid-cols-1 xl:grid-cols-12 gap-8">
                     <div class="xl:col-span-5 luxury-card p-8 rounded-3xl shadow-2xl border-blue-900/20">
-                        <h3 class="text-xl font-bold mb-6 flex items-center gold-text">
-                            <i class="fas fa-edit ml-2"></i> إنشاء عرض احترافي
-                        </h3>
-                        
+                        <h3 class="text-xl font-bold mb-6 gold-text">إضافة عرض جديد</h3>
                         <div class="space-y-4">
+                            <input type="text" id="p-name" class="w-full glass-input rounded-xl p-3 text-white" placeholder="اسم المنتج">
                             <div class="grid grid-cols-2 gap-4">
-                                <div class="col-span-2">
-                                    <label class="block text-[11px] font-bold text-gray-500 mr-2 mb-1">اسم المنتج</label>
-                                    <input type="text" id="p-name" class="w-full glass-input rounded-xl p-3 text-white" placeholder="مثلاً: مشحون 1000 جوهرة">
-                                </div>
-                                
-                                <div>
-                                    <label class="block text-[11px] font-bold text-gray-500 mr-2 mb-1 text-blue-400">الفئة</label>
-                                    <select id="p-cat" class="w-full glass-input rounded-xl p-3 text-white">
-                                        <option value="Free Fire">🔥 Free Fire</option>
-                                        <option value="PUBG">🪂 PUBG Mobile</option>
-                                        <option value="PES">⚽ PES Mobile</option>
-                                        <option value="Google Play">💳 Google Play</option>
-                                        <option value="Services">🛠️ خدمات أخرى</option>
-                                    </select>
-                                </div>
-                                
-                                <div>
-                                    <label class="block text-[11px] font-bold text-gray-500 mr-2 mb-1 text-gold-400">نوع العرض</label>
-                                    <select id="p-type" class="w-full glass-input rounded-xl p-3 text-white">
-                                        <option value="Sale">🟢 بيع</option>
-                                        <option value="Buy">🔴 شراء</option>
-                                        <option value="Trade">🔵 تبادل</option>
-                                    </select>
-                                </div>
-
-                                <div>
-                                    <label class="block text-[11px] font-bold text-gray-500 mr-2 mb-1">السعر (DA)</label>
-                                    <input type="number" id="p-price-da" class="w-full glass-input rounded-xl p-3 text-white" placeholder="00.00">
-                                </div>
-                                
-                                <div>
-                                    <label class="block text-[11px] font-bold text-gray-500 mr-2 mb-1">السعر ($)</label>
-                                    <input type="number" id="p-price-usd" class="w-full glass-input rounded-xl p-3 text-white" placeholder="0.00">
-                                </div>
+                                <select id="p-cat" class="w-full glass-input rounded-xl p-3 text-white">
+                                    <option value="Free Fire">🔥 Free Fire</option>
+                                    <option value="PUBG">🪂 PUBG Mobile</option>
+                                    <option value="Google Play">💳 Google Play</option>
+                                </select>
+                                <select id="p-type" class="w-full glass-input rounded-xl p-3 text-white">
+                                    <option value="Sale">بيع</option>
+                                    <option value="Buy">شراء</option>
+                                </select>
+                                <input type="number" id="p-price-da" class="w-full glass-input rounded-xl p-3 text-white" placeholder="السعر DA">
+                                <input type="number" id="p-price-usd" class="w-full glass-input rounded-xl p-3 text-white" placeholder="السعر $">
                             </div>
-
-                            <div>
-                                <label class="block text-[11px] font-bold text-gray-500 mr-2 mb-1">رابط الصورة (URL)</label>
-                                <input type="text" id="p-img" class="w-full glass-input rounded-xl p-3 text-white" placeholder="https://...">
-                            </div>
-
-                            <div>
-                                <label class="block text-[11px] font-bold text-gray-500 mr-2 mb-1">رابط تواصل البائع (FB/WhatsApp)</label>
-                                <input type="text" id="p-link" class="w-full glass-input rounded-xl p-3 text-white font-mono text-sm" placeholder="https://t.me/yourname">
-                            </div>
-
-                            <div>
-                                <label class="block text-[11px] font-bold text-gray-500 mr-2 mb-1">المواصفات (الوصف)</label>
-                                <textarea id="p-desc" rows="3" class="w-full glass-input rounded-xl p-3 text-white" placeholder="تفاصيل الحساب أو الخدمة..."></textarea>
-                            </div>
-
-                            <button id="submit-btn" onclick="uploadToGithub()" class="w-full btn-luxury p-4 rounded-xl font-extrabold text-black uppercase tracking-wider mt-4">
-                                <i class="fas fa-fire ml-2"></i> نشر العرض الآن
-                            </button>
+                            <input type="text" id="p-img" class="w-full glass-input rounded-xl p-3 text-white" placeholder="رابط الصورة">
+                            <input type="text" id="p-link" class="w-full glass-input rounded-xl p-3 text-white" placeholder="رابط تواصل البائع">
+                            <textarea id="p-desc" rows="3" class="w-full glass-input rounded-xl p-3 text-white" placeholder="وصف المنتج"></textarea>
+                            <button id="submit-btn" onclick="uploadToGithub()" class="w-full btn-luxury p-4 rounded-xl font-extrabold text-black">نشر العرض</button>
                         </div>
                         <div id="status" class="mt-4 text-center text-sm font-bold"></div>
                     </div>
-
-                    <div class="xl:col-span-7 space-y-6">
-                        <div class="flex justify-between items-end">
-                            <h3 class="text-xl font-bold electric-blue">قائمة العروض الحية</h3>
-                            <span class="text-xs text-gray-600">آخر التحديثات</span>
-                        </div>
-                        
-                        <div id="products-list" class="grid grid-cols-1 gap-4 overflow-y-auto max-h-[700px] pr-2 custom-scrollbar">
-                            </div>
+                    <div class="xl:col-span-7">
+                        <div id="products-list" class="grid grid-cols-1 gap-4 max-h-[700px] overflow-y-auto"></div>
                     </div>
                 </div>
             </div>
@@ -148,13 +78,26 @@
     const REPO = "cheikh-mimo/DZ-STORE";
     const FILE_PATH = "products.json";
 
-    window.onload = loadProducts;
+    // --- الحل الثاني: طلب التوكن بدون صفحة LOGIN منفصلة ---
+    window.onload = function() {
+        if(!localStorage.getItem('gh_token_mimo')) {
+            let t = prompt("يرجى إدخال GitHub Token (ghp_...) للوصول للوحة التحكم:");
+            if(t && t.startsWith('ghp_')) {
+                localStorage.setItem('gh_token_mimo', t);
+                location.reload();
+            } else {
+                alert("التوكن مطلوب!");
+                document.body.innerHTML = "<h2 style='color:white; text-align:center; margin-top:50px;'>يجب إدخال التوكن لفتح اللوحة. أعد تحميل الصفحة.</h2>";
+            }
+        } else {
+            document.getElementById('main-content').style.display = 'flex';
+            loadProducts();
+        }
+    }
 
     async function loadProducts() {
         const token = localStorage.getItem('gh_token_mimo');
         const listDiv = document.getElementById('products-list');
-        if(!token) return window.location.href = "login.html";
-
         try {
             const res = await fetch(`https://api.github.com/repos/${REPO}/contents/${FILE_PATH}`, {
                 headers: { 'Authorization': `token ${token}` }
@@ -163,30 +106,22 @@
                 const data = await res.json();
                 const products = JSON.parse(decodeURIComponent(escape(atob(data.content))));
                 listDiv.innerHTML = products.reverse().map(p => `
-                    <div class="luxury-card p-4 rounded-2xl flex items-center gap-4 border-l-4 ${p.type === 'Sale' ? 'border-green-500' : 'border-blue-500'} group hover:scale-[1.01] transition">
-                        <img src="${p.image || 'https://via.placeholder.com/100'}" class="w-16 h-16 rounded-xl object-cover border border-gray-700">
+                    <div class="luxury-card p-4 rounded-2xl flex items-center gap-4 border-l-4 border-blue-500">
+                        <img src="${p.image || 'https://via.placeholder.com/60'}" class="w-12 h-12 rounded-lg object-cover">
                         <div class="flex-1">
-                            <div class="flex justify-between items-start">
-                                <h4 class="font-bold gold-text text-lg">${p.name}</h4>
-                                <span class="text-[10px] bg-blue-900/30 text-blue-400 px-2 py-1 rounded-md uppercase font-black">${p.category}</span>
-                            </div>
-                            <p class="text-[10px] text-gray-500 line-clamp-1">${p.desc}</p>
-                            <div class="mt-2 flex gap-4 text-xs font-bold text-gray-300">
-                                <span><i class="fas fa-money-bill-wave text-green-500 ml-1"></i> ${p.priceDA} DA</span>
-                                <span><i class="fas fa-dollar-sign text-amber-500 ml-1"></i> ${p.priceUSD} $</span>
-                            </div>
+                            <h4 class="font-bold gold-text">${p.name}</h4>
+                            <p class="text-xs text-gray-500">${p.priceDA} DA - ${p.category}</p>
                         </div>
                     </div>
                 `).join('');
             }
-        } catch (e) { listDiv.innerHTML = "فشل تحميل العروض."; }
+        } catch (e) { console.error(e); }
     }
 
     async function uploadToGithub() {
         const token = localStorage.getItem('gh_token_mimo');
         const btn = document.getElementById('submit-btn');
         const status = document.getElementById('status');
-
         const product = {
             id: Date.now(),
             name: document.getElementById('p-name').value,
@@ -197,48 +132,38 @@
             image: document.getElementById('p-img').value,
             sellerLink: document.getElementById('p-link').value,
             desc: document.getElementById('p-desc').value,
-            date: new Date().toLocaleString('ar-DZ')
+            date: new Date().toLocaleDateString()
         };
 
-        if(!product.name || !product.priceDA) return alert("الاسم والسعر ضروريان!");
-
+        if(!product.name || !product.priceDA) return alert("أكمل البيانات!");
         btn.disabled = true;
-        status.innerHTML = '<i class="fas fa-spinner fa-spin electric-blue"></i> جاري تشفير البيانات...';
+        status.innerHTML = "جاري الرفع...";
 
         try {
-            let sha = "";
-            let currentData = [];
+            let sha = ""; let currentData = [];
             const getRes = await fetch(`https://api.github.com/repos/${REPO}/contents/${FILE_PATH}`, {
                 headers: { 'Authorization': `token ${token}` }
             });
-
             if (getRes.ok) {
                 const fileData = await getRes.json();
                 sha = fileData.sha;
                 currentData = JSON.parse(decodeURIComponent(escape(atob(fileData.content))));
             }
-
             currentData.push(product);
-
             const putRes = await fetch(`https://api.github.com/repos/${REPO}/contents/${FILE_PATH}`, {
                 method: 'PUT',
                 headers: { 'Authorization': `token ${token}`, 'Content-Type': 'application/json' },
                 body: JSON.stringify({
-                    message: `Gaming Offer: ${product.name}`,
+                    message: "New Product",
                     content: btoa(unescape(encodeURIComponent(JSON.stringify(currentData, null, 2)))),
                     sha: sha
                 })
             });
-
             if (putRes.ok) {
-                status.className = "mt-4 text-center text-green-400 font-black";
-                status.innerHTML = '✨ تمت العملية بنجاح! العرض الآن مباشر.';
+                status.innerHTML = "✅ نجح الرفع!";
                 loadProducts();
-                document.querySelectorAll('input, textarea').forEach(i => i.value = "");
             }
-        } catch (err) {
-            status.innerText = "❌ خطأ تقني";
-        } finally { btn.disabled = false; }
+        } catch (err) { status.innerHTML = "❌ خطأ!"; } finally { btn.disabled = false; }
     }
 
     function clearToken() { localStorage.removeItem('gh_token_mimo'); location.reload(); }
