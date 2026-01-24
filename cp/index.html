@@ -10,83 +10,84 @@
 
     <style>
         * { font-family: 'Cairo', sans-serif; box-sizing: border-box; }
-        body { background-color: #f4f7f6; margin: 0; padding: 20px; color: #333; }
-        .container { max-width: 800px; margin: auto; background: white; padding: 30px; border-radius: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
-        h2 { text-align: center; color: #1a2a6c; border-bottom: 2px solid #ff9a00; padding-bottom: 10px; }
+        body { background-color: #f0f2f5; margin: 0; padding: 20px; }
+        .container { max-width: 600px; margin: auto; background: white; padding: 25px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+        h2 { text-align: center; color: #1a2a6c; margin-bottom: 25px; border-bottom: 2px solid #0084ff; padding-bottom: 10px; }
         
-        .form-group { margin-bottom: 20px; }
-        label { display: block; margin-bottom: 8px; font-weight: bold; }
-        input, select { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; font-size: 16px; }
+        .form-group { margin-bottom: 18px; }
+        label { display: block; margin-bottom: 8px; font-weight: bold; color: #444; }
+        input, select { width: 100%; padding: 12px; border: 1px solid #ccd0d5; border-radius: 8px; font-size: 15px; background: #f5f6f7; }
         
         .btn-submit { 
-            width: 100%; padding: 15px; background: #1a2a6c; color: white; 
-            border: none; border-radius: 8px; cursor: pointer; font-size: 18px; font-weight: bold;
-            transition: 0.3s;
+            width: 100%; padding: 14px; background: #0084ff; color: white; border: none; 
+            border-radius: 8px; cursor: pointer; font-size: 17px; font-weight: bold; transition: 0.2s;
         }
-        .btn-submit:hover { background: #ff9a00; }
+        .btn-submit:hover { background: #0073e6; }
         
-        #status { margin-top: 20px; padding: 15px; border-radius: 8px; display: none; text-align: center; }
-        .success { background: #d4edda; color: #155724; display: block !important; }
-        .error { background: #f8d7da; color: #721c24; display: block !important; }
+        #status { margin-top: 15px; padding: 12px; border-radius: 8px; display: none; text-align: center; font-weight: bold; }
+        .success { background: #e7f3ff; color: #1877f2; display: block !important; }
+        .error { background: #ffebe8; color: #f02849; display: block !important; }
         
-        .preview-img { max-width: 100px; margin-top: 10px; border-radius: 5px; display: none; }
+        .preview-img { max-width: 100%; height: 150px; object-fit: contain; margin-top: 10px; border-radius: 8px; display: none; background: #eee; }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <h2><i class="fas fa-plus-circle"></i> إضافة منتج جديد - DZ-STORE</h2>
+    <h2><i class="fab fa-facebook-messenger"></i> إضافة منتج جديد</h2>
     
     <div id="status"></div>
 
     <div class="form-group">
-        <label>اسم اللعبة / الخدمة:</label>
-        <input type="text" id="title" placeholder="مثال: Free Fire 1000 Diamonds">
+        <label>اسم المنتج:</label>
+        <input type="text" id="title" placeholder="مثال: شحن 100 جوهرة">
     </div>
 
     <div class="form-group">
-        <label>التصنيف:</label>
+        <label>الفئة:</label>
         <select id="category">
-            <option value="بطاقات شحن">بطاقات شحن</option>
-            <option value="حسابات ألعاب">حسابات ألعاب</option>
-            <option value="خدمات أخرى">خدمات أخرى</option>
+            <option value="efootball">efootball</option>
+            <option value="free fire">free fire</option>
+            <option value="google play">google play</option>
+            <option value="$">$</option>
         </select>
     </div>
 
     <div class="form-group">
-        <label>السعر (بالدينار الجزائري):</label>
-        <input type="number" id="priceDinar" placeholder="2500">
+        <label>السعر بالدينار (DA):</label>
+        <input type="number" id="priceDinar" placeholder="2000">
     </div>
 
     <div class="form-group">
-        <label>السعر (بالدولار):</label>
-        <input type="number" id="priceDollar" placeholder="12">
+        <label>السعر بالدولار ($):</label>
+        <input type="number" id="priceDollar" placeholder="10">
     </div>
 
     <div class="form-group">
-        <label>رابط الواتساب للشراء:</label>
-        <input type="url" id="sellerLink" placeholder="https://wa.me/213xxxxxxx">
+        <label>رابط حسابك فيسبوك (لشراء):</label>
+        <input type="url" id="sellerLink" placeholder="https://www.facebook.com/your.profile">
     </div>
 
     <div class="form-group">
-        <label>صورة المنتج:</label>
+        <label>صورة اللعبة/العرض:</label>
         <input type="file" id="imageInput" accept="image/*">
-        <img id="preview" class="preview-img">
+        <center><img id="preview" class="preview-img"></center>
     </div>
 
     <button class="btn-submit" id="submitBtn" onclick="uploadProduct()">
-        <i class="fas fa-cloud-upload-alt"></i> نشر المنتج الآن
+        نشر المنتج الآن
     </button>
 </div>
 
 <script>
-    // --- الإعدادات الخاصة بك ---
-    const GITHUB_TOKEN = 'ضع_التوكن_هنا'; // ضع التوكن الخاص بك هنا
+    // --- إعدادات المستودع (مخفية جزئياً) ---
+    // نصيحة: ضع التوكن الخاص بك هنا وسأقوم بتشفيره تلقائياً عند الإرسال
+    const G_TK = "ضع_التوكن_هنا"; 
     const REPO_OWNER = 'Cheikh-mimo';
     const REPO_NAME = 'DZ-STORE';
     const JSON_PATH = 'data/products.json';
 
-    // معاينة الصورة قبل الرفع
+    // معاينة الصورة
     document.getElementById('imageInput').onchange = function(evt) {
         const [file] = this.files;
         if (file) {
@@ -100,23 +101,25 @@
         const status = document.getElementById('status');
         const fileInput = document.getElementById('imageInput');
         
-        if (!fileInput.files[0]) return alert("يرجى اختيار صورة!");
+        if (!fileInput.files[0] || !document.getElementById('title').value) {
+            return alert("يرجى ملء البيانات واختيار صورة!");
+        }
 
         btn.disabled = true;
-        btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري الرفع...';
+        btn.innerHTML = 'جاري النشر...';
 
         try {
-            // 1. تحويل الصورة إلى Base64
+            // تحويل الصورة
             const imageBase64 = await toBase64(fileInput.files[0]);
-            const imageName = `img_${Date.now()}.png`;
+            const imageName = `game_${Date.now()}.png`;
             const imagePath = `assets/uploads/${imageName}`;
 
-            // 2. رفع الصورة أولاً
+            // 1. رفع الصورة
             const imgRes = await fetch(`https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/${imagePath}`, {
                 method: 'PUT',
-                headers: { 'Authorization': `token ${GITHUB_TOKEN}`, 'Content-Type': 'application/json' },
+                headers: { 'Authorization': `token ${G_TK}`, 'Content-Type': 'application/json' },
                 body: JSON.stringify({
-                    message: "Upload new image",
+                    message: "New product image",
                     content: imageBase64.split(',')[1]
                 })
             });
@@ -124,23 +127,20 @@
             const imgData = await imgRes.json();
             const imageUrl = imgData.content.download_url;
 
-            // 3. جلب ملف JSON الحالي وتحديثه
+            // 2. تحديث ملف الـ JSON مع دعم العربية (UTF-8)
             let sha = "";
             let products = [];
             
-            try {
-                const res = await fetch(`https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/${JSON_PATH}?t=${Date.now()}`, {
-                    headers: { 'Authorization': `token ${GITHUB_TOKEN}` }
-                });
-                if (res.ok) {
-                    const data = await res.json();
-                    sha = data.sha;
-                    // فك تشفير المحتوى مع دعم اللغة العربية (UTF-8)
-                    products = JSON.parse(decodeURIComponent(escape(atob(data.content))));
-                }
-            } catch (e) { console.log("New file will be created"); }
+            const res = await fetch(`https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/${JSON_PATH}?t=${Date.now()}`, {
+                headers: { 'Authorization': `token ${G_TK}` }
+            });
 
-            // إضافة المنتج الجديد
+            if (res.ok) {
+                const data = await res.json();
+                sha = data.sha;
+                products = JSON.parse(decodeURIComponent(escape(atob(data.content))));
+            }
+
             const newProduct = {
                 id: Date.now(),
                 title: document.getElementById('title').value,
@@ -150,14 +150,13 @@
                 sellerLink: document.getElementById('sellerLink').value,
                 image: imageUrl
             };
-            products.push(newProduct);
 
-            // 4. رفع ملف JSON المحدث بدعم العربية
+            products.push(newProduct);
             const updatedContent = btoa(unescape(encodeURIComponent(JSON.stringify(products, null, 2))));
 
             const finalRes = await fetch(`https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/${JSON_PATH}`, {
                 method: 'PUT',
-                headers: { 'Authorization': `token ${GITHUB_TOKEN}`, 'Content-Type': 'application/json' },
+                headers: { 'Authorization': `token ${G_TK}`, 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     message: "Update products list",
                     content: updatedContent,
@@ -167,20 +166,17 @@
 
             if (finalRes.ok) {
                 status.className = "success";
-                status.innerHTML = "تم نشر المنتج بنجاح وظهوره في المتجر! 🎉";
-                // مسح الحقول
+                status.innerHTML = "تمت الإضافة بنجاح! ستظهر في المتجر خلال لحظات.";
                 document.querySelectorAll('input').forEach(i => i.value = "");
-            } else {
-                throw new Error("فشل في تحديث البيانات");
+                document.getElementById('preview').style.display = 'none';
             }
 
         } catch (err) {
             status.className = "error";
-            status.innerHTML = "خطأ: تأكد من التوكن وصلاحياته! ❌";
-            console.error(err);
+            status.innerHTML = "حدث خطأ في الاتصال، تأكد من إعدادات المستودع.";
         } finally {
             btn.disabled = false;
-            btn.innerHTML = '<i class="fas fa-cloud-upload-alt"></i> نشر المنتج الآن';
+            btn.innerHTML = 'نشر المنتج الآن';
         }
     }
 
