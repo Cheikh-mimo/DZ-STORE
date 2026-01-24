@@ -3,84 +3,211 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>لوحة تحكم ALG-STORE</title>
+    <title>DZ-STORE | Luxury Gaming Admin</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
     <style>
-        body { font-family: sans-serif; background: #020617; color: white; display: flex; justify-content: center; padding: 20px; }
-        .container { background: #0f172a; padding: 25px; border-radius: 12px; width: 100%; max-width: 400px; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1); }
-        h2 { text-align: center; color: #22c55e; }
-        input, textarea { width: 100%; padding: 12px; margin: 10px 0; border-radius: 6px; border: 1px solid #1e293b; background: #1e293b; color: white; box-sizing: border-box; }
-        button { width: 100%; padding: 12px; background: #22c55e; border: none; color: white; font-weight: bold; border-radius: 6px; cursor: pointer; transition: 0.3s; }
-        button:hover { background: #16a34a; }
-        .status { margin-top: 15px; font-size: 14px; text-align: center; }
+        body { font-family: 'Cairo', sans-serif; background-color: #050505; color: #e5e7eb; }
+        .luxury-card { background: linear-gradient(145deg, #111827, #020617); border: 1px solid #1e293b; }
+        .gold-text { background: linear-gradient(to right, #fde047, #ca8a04); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .electric-blue { color: #3b82f6; text-shadow: 0 0 10px rgba(59, 130, 246, 0.5); }
+        .btn-luxury { background: linear-gradient(90deg, #ca8a04 0%, #a16207 100%); transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+        .btn-luxury:hover { transform: translateY(-2px); box-shadow: 0 4px 15px rgba(202, 138, 4, 0.4); }
+        .glass-input { background: rgba(31, 41, 55, 0.5); border: 1px solid #374151; transition: 0.3s; }
+        .glass-input:focus { border-color: #3b82f6; box-shadow: 0 0 8px rgba(59, 130, 246, 0.3); outline: none; }
+        .sidebar-link:hover { background: rgba(59, 130, 246, 0.1); border-right: 4px solid #3b82f6; }
     </style>
 </head>
-<body>
+<body class="overflow-x-hidden">
 
-<div class="container">
-    <h2>إضافة منتج جديد</h2>
-    
-    <div id="auth-section">
-        <input type="password" id="github-token" placeholder="أدخل GitHub Token (مرة واحدة)">
-        <button onclick="saveToken()">حفظ المفتاح والبدء</button>
+    <div class="min-h-screen flex flex-col md:flex-row">
+        <aside class="w-full md:w-72 luxury-card p-6 flex flex-col shadow-2xl">
+            <div class="mb-10 text-center">
+                <h1 class="text-3xl font-extrabold gold-text tracking-tighter italic">DZ-STORE</h1>
+                <p class="text-[10px] electric-blue font-bold uppercase tracking-[0.2em]">Gaming Luxury Dashboard</p>
+            </div>
+            
+            <nav class="flex-1 space-y-2 text-sm">
+                <a href="#" class="sidebar-link flex items-center p-3 rounded-lg text-white font-bold transition">
+                    <i class="fas fa-plus-square ml-3 text-lg electric-blue"></i> إضافة عرض جديد
+                </a>
+                <a href="#" class="sidebar-link flex items-center p-3 rounded-lg text-gray-400 transition hover:text-white">
+                    <i class="fas fa-gamepad ml-3 text-lg"></i> إدارة الألعاب
+                </a>
+                <a href="#" class="sidebar-link flex items-center p-3 rounded-lg text-gray-400 transition hover:text-white">
+                    <i class="fas fa-wallet ml-3 text-lg"></i> المبيعات
+                </a>
+            </nav>
+
+            <div class="mt-auto pt-6 border-t border-gray-800">
+                <button onclick="clearToken()" class="flex items-center text-red-500 hover:text-red-400 font-bold transition">
+                    <i class="fas fa-power-off ml-2"></i> خروج آمن
+                </button>
+            </div>
+        </aside>
+
+        <main class="flex-1 p-4 md:p-10">
+            <div class="max-w-6xl mx-auto">
+                
+                <div class="flex flex-col md:flex-row justify-between items-center mb-10 gap-4">
+                    <div>
+                        <h2 class="text-2xl font-bold text-white flex items-center">
+                            <span class="w-2 h-8 bg-blue-600 rounded-full ml-3"></span>
+                            نظام العروض المتقدمة
+                        </h2>
+                    </div>
+                    <div class="flex gap-4">
+                        <div class="luxury-card px-6 py-2 rounded-full border border-blue-900/30 text-xs">
+                            <span class="text-gray-400">حالة المستودع:</span> <span class="text-green-400">متصل <i class="fas fa-circle text-[8px] animate-pulse"></i></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 xl:grid-cols-12 gap-8">
+                    <div class="xl:col-span-5 luxury-card p-8 rounded-3xl shadow-2xl border-blue-900/20">
+                        <h3 class="text-xl font-bold mb-6 flex items-center gold-text">
+                            <i class="fas fa-edit ml-2"></i> إنشاء عرض احترافي
+                        </h3>
+                        
+                        <div class="space-y-4">
+                            <div class="grid grid-cols-2 gap-4">
+                                <div class="col-span-2">
+                                    <label class="block text-[11px] font-bold text-gray-500 mr-2 mb-1">اسم المنتج</label>
+                                    <input type="text" id="p-name" class="w-full glass-input rounded-xl p-3 text-white" placeholder="مثلاً: مشحون 1000 جوهرة">
+                                </div>
+                                
+                                <div>
+                                    <label class="block text-[11px] font-bold text-gray-500 mr-2 mb-1 text-blue-400">الفئة</label>
+                                    <select id="p-cat" class="w-full glass-input rounded-xl p-3 text-white">
+                                        <option value="Free Fire">🔥 Free Fire</option>
+                                        <option value="PUBG">🪂 PUBG Mobile</option>
+                                        <option value="PES">⚽ PES Mobile</option>
+                                        <option value="Google Play">💳 Google Play</option>
+                                        <option value="Services">🛠️ خدمات أخرى</option>
+                                    </select>
+                                </div>
+                                
+                                <div>
+                                    <label class="block text-[11px] font-bold text-gray-500 mr-2 mb-1 text-gold-400">نوع العرض</label>
+                                    <select id="p-type" class="w-full glass-input rounded-xl p-3 text-white">
+                                        <option value="Sale">🟢 بيع</option>
+                                        <option value="Buy">🔴 شراء</option>
+                                        <option value="Trade">🔵 تبادل</option>
+                                    </select>
+                                </div>
+
+                                <div>
+                                    <label class="block text-[11px] font-bold text-gray-500 mr-2 mb-1">السعر (DA)</label>
+                                    <input type="number" id="p-price-da" class="w-full glass-input rounded-xl p-3 text-white" placeholder="00.00">
+                                </div>
+                                
+                                <div>
+                                    <label class="block text-[11px] font-bold text-gray-500 mr-2 mb-1">السعر ($)</label>
+                                    <input type="number" id="p-price-usd" class="w-full glass-input rounded-xl p-3 text-white" placeholder="0.00">
+                                </div>
+                            </div>
+
+                            <div>
+                                <label class="block text-[11px] font-bold text-gray-500 mr-2 mb-1">رابط الصورة (URL)</label>
+                                <input type="text" id="p-img" class="w-full glass-input rounded-xl p-3 text-white" placeholder="https://...">
+                            </div>
+
+                            <div>
+                                <label class="block text-[11px] font-bold text-gray-500 mr-2 mb-1">رابط تواصل البائع (FB/WhatsApp)</label>
+                                <input type="text" id="p-link" class="w-full glass-input rounded-xl p-3 text-white font-mono text-sm" placeholder="https://t.me/yourname">
+                            </div>
+
+                            <div>
+                                <label class="block text-[11px] font-bold text-gray-500 mr-2 mb-1">المواصفات (الوصف)</label>
+                                <textarea id="p-desc" rows="3" class="w-full glass-input rounded-xl p-3 text-white" placeholder="تفاصيل الحساب أو الخدمة..."></textarea>
+                            </div>
+
+                            <button id="submit-btn" onclick="uploadToGithub()" class="w-full btn-luxury p-4 rounded-xl font-extrabold text-black uppercase tracking-wider mt-4">
+                                <i class="fas fa-fire ml-2"></i> نشر العرض الآن
+                            </button>
+                        </div>
+                        <div id="status" class="mt-4 text-center text-sm font-bold"></div>
+                    </div>
+
+                    <div class="xl:col-span-7 space-y-6">
+                        <div class="flex justify-between items-end">
+                            <h3 class="text-xl font-bold electric-blue">قائمة العروض الحية</h3>
+                            <span class="text-xs text-gray-600">آخر التحديثات</span>
+                        </div>
+                        
+                        <div id="products-list" class="grid grid-cols-1 gap-4 overflow-y-auto max-h-[700px] pr-2 custom-scrollbar">
+                            </div>
+                    </div>
+                </div>
+            </div>
+        </main>
     </div>
-
-    <div id="product-section" style="display:none;">
-        <input type="text" id="p-name" placeholder="اسم المنتج">
-        <input type="number" id="p-price" placeholder="السعر">
-        <textarea id="p-desc" placeholder="وصف قصير"></textarea>
-        <button id="submit-btn" onclick="uploadToGithub()">نشر المنتج في المتجر</button>
-        <button onclick="clearToken()" style="background:#ef4444; margin-top:10px;">تسجيل الخروج</button>
-    </div>
-
-    <div id="status" class="status"></div>
-</div>
 
 <script>
-    const REPO = "cheikhchouaibcheikhchouaib-droid/ALG-STORE";
-    const FILE_PATH = "data.json"; // سيتم حفظ المنتجات في هذا الملف
+    const REPO = "cheikh-mimo/DZ-STORE";
+    const FILE_PATH = "products.json";
 
-    // 1. التحقق من وجود التوكن
-    if(localStorage.getItem('gh_token')) {
-        showProductSection();
+    window.onload = loadProducts;
+
+    async function loadProducts() {
+        const token = localStorage.getItem('gh_token_mimo');
+        const listDiv = document.getElementById('products-list');
+        if(!token) return window.location.href = "login.html";
+
+        try {
+            const res = await fetch(`https://api.github.com/repos/${REPO}/contents/${FILE_PATH}`, {
+                headers: { 'Authorization': `token ${token}` }
+            });
+            if (res.ok) {
+                const data = await res.json();
+                const products = JSON.parse(decodeURIComponent(escape(atob(data.content))));
+                listDiv.innerHTML = products.reverse().map(p => `
+                    <div class="luxury-card p-4 rounded-2xl flex items-center gap-4 border-l-4 ${p.type === 'Sale' ? 'border-green-500' : 'border-blue-500'} group hover:scale-[1.01] transition">
+                        <img src="${p.image || 'https://via.placeholder.com/100'}" class="w-16 h-16 rounded-xl object-cover border border-gray-700">
+                        <div class="flex-1">
+                            <div class="flex justify-between items-start">
+                                <h4 class="font-bold gold-text text-lg">${p.name}</h4>
+                                <span class="text-[10px] bg-blue-900/30 text-blue-400 px-2 py-1 rounded-md uppercase font-black">${p.category}</span>
+                            </div>
+                            <p class="text-[10px] text-gray-500 line-clamp-1">${p.desc}</p>
+                            <div class="mt-2 flex gap-4 text-xs font-bold text-gray-300">
+                                <span><i class="fas fa-money-bill-wave text-green-500 ml-1"></i> ${p.priceDA} DA</span>
+                                <span><i class="fas fa-dollar-sign text-amber-500 ml-1"></i> ${p.priceUSD} $</span>
+                            </div>
+                        </div>
+                    </div>
+                `).join('');
+            }
+        } catch (e) { listDiv.innerHTML = "فشل تحميل العروض."; }
     }
 
-    function saveToken() {
-        const token = document.getElementById('github-token').value;
-        if(token) {
-            localStorage.setItem('gh_token', token);
-            showProductSection();
-        }
-    }
-
-    function showProductSection() {
-        document.getElementById('auth-section').style.display = 'none';
-        document.getElementById('product-section').style.display = 'block';
-    }
-
-    function clearToken() {
-        localStorage.removeItem('gh_token');
-        location.reload();
-    }
-
-    // 2. الوظيفة الأساسية: الرفع إلى GitHub API
     async function uploadToGithub() {
-        const token = localStorage.getItem('gh_token');
-        const name = document.getElementById('p-name').value;
-        const price = document.getElementById('p-price').value;
-        const desc = document.getElementById('p-desc').value;
+        const token = localStorage.getItem('gh_token_mimo');
         const btn = document.getElementById('submit-btn');
         const status = document.getElementById('status');
 
-        if(!name || !price) return alert("يرجى ملء البيانات");
+        const product = {
+            id: Date.now(),
+            name: document.getElementById('p-name').value,
+            category: document.getElementById('p-cat').value,
+            type: document.getElementById('p-type').value,
+            priceDA: document.getElementById('p-price-da').value,
+            priceUSD: document.getElementById('p-price-usd').value,
+            image: document.getElementById('p-img').value,
+            sellerLink: document.getElementById('p-link').value,
+            desc: document.getElementById('p-desc').value,
+            date: new Date().toLocaleString('ar-DZ')
+        };
+
+        if(!product.name || !product.priceDA) return alert("الاسم والسعر ضروريان!");
 
         btn.disabled = true;
-        status.innerText = "جاري الاتصال بـ GitHub...";
+        status.innerHTML = '<i class="fas fa-spinner fa-spin electric-blue"></i> جاري تشفير البيانات...';
 
         try {
-            // أ. جلب الملف الحالي لوضع المنتج الجديد معه
             let sha = "";
-            let currentProducts = [];
-            
+            let currentData = [];
             const getRes = await fetch(`https://api.github.com/repos/${REPO}/contents/${FILE_PATH}`, {
                 headers: { 'Authorization': `token ${token}` }
             });
@@ -88,41 +215,33 @@
             if (getRes.ok) {
                 const fileData = await getRes.json();
                 sha = fileData.sha;
-                currentProducts = JSON.parse(atob(fileData.content));
+                currentData = JSON.parse(decodeURIComponent(escape(atob(fileData.content))));
             }
 
-            // ب. إضافة المنتج الجديد للقائمة
-            currentProducts.push({ id: Date.now(), name, price, desc });
+            currentData.push(product);
 
-            // ج. رفع الملف المحدث
             const putRes = await fetch(`https://api.github.com/repos/${REPO}/contents/${FILE_PATH}`, {
                 method: 'PUT',
-                headers: {
-                    'Authorization': `token ${token}`,
-                    'Content-Type': 'application/json'
-                },
+                headers: { 'Authorization': `token ${token}`, 'Content-Type': 'application/json' },
                 body: JSON.stringify({
-                    message: `إضافة منتج: ${name}`,
-                    content: btoa(unescape(encodeURIComponent(JSON.stringify(currentProducts, null, 2)))),
+                    message: `Gaming Offer: ${product.name}`,
+                    content: btoa(unescape(encodeURIComponent(JSON.stringify(currentData, null, 2)))),
                     sha: sha
                 })
             });
 
             if (putRes.ok) {
-                status.style.color = "#22c55e";
-                status.innerText = "✅ تم نشر المنتج بنجاح!";
-                document.getElementById('p-name').value = "";
-                document.getElementById('p-price').value = "";
-            } else {
-                throw new Error("فشل التحديث");
+                status.className = "mt-4 text-center text-green-400 font-black";
+                status.innerHTML = '✨ تمت العملية بنجاح! العرض الآن مباشر.';
+                loadProducts();
+                document.querySelectorAll('input, textarea').forEach(i => i.value = "");
             }
         } catch (err) {
-            status.style.color = "#ef4444";
-            status.innerText = "❌ خطأ في التوكن أو الاتصال";
-        } finally {
-            btn.disabled = false;
-        }
+            status.innerText = "❌ خطأ تقني";
+        } finally { btn.disabled = false; }
     }
+
+    function clearToken() { localStorage.removeItem('gh_token_mimo'); location.reload(); }
 </script>
 </body>
 </html>
